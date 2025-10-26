@@ -11,7 +11,12 @@ cd MDM-SAMPLES
 pip install -r requirements.txt
 ```
 
+### Dataset:
+Samples will be provided here in a jsonl.
+
 ### Code references:
 https://github.com/NEUIR/PC-Sampler
+
 https://github.com/ML-GSAI/LLaDA
+
 https://github.com/smarter-vlm/smarter
