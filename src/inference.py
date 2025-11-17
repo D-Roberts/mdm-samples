@@ -116,7 +116,6 @@ def main():
     # print(model)
 
     # Likelihood ratio test
-
     # this prompt and answer is from Hellaswag dataset
     prompt = "Roof shingle removal: A man is sitting on a roof. He"
     answer = " is using wrap to wrap a pair of skis."
