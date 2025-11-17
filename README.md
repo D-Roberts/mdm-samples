@@ -14,6 +14,27 @@ pip install -r requirements.txt
 ### Dataset:
 Samples will be provided here in a jsonl file.
 
+### Current directory structure:
+.
+├── artifacts
+├── clean.sh
+├── data
+├── LICENSE
+├── README.md
+├── requirements.txt
+├── results
+│   └── baseline.txt
+├── scripts
+│   ├── baseline_margin.sh
+│   ├── eb_sampler.sh
+│   ├── fast_dllm.sh
+│   ├── get_likeli_ratio.py
+│   └── pc_sampler.sh
+└── src
+    ├── __init__.py
+    ├── dev_inference.py
+    └── inference.py
+
 ### Code references:
 https://github.com/NEUIR/PC-Sampler
 
