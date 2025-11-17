@@ -28,3 +28,6 @@ model = AutoModel.from_pretrained(
 
 model.to(device)
 model.eval()
+
+# Model architecture
+print(model)
