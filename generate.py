@@ -7,6 +7,17 @@ import torch
 BASE_LINE = None
 
 
+def entropy_function(probabilities):
+    if probabilities.dim() != 3:
+        raise ValueError(
+            "Input tensor 'probabilities' must be a 3D tensor with shape [batch_size, sequence_len, vocab_size]"
+        )
+    epsilon = 1e-12
+    probs_safe = probabilities.clone() + epsilon
+    entropy = torch.sum(probabilities.clone() * torch.log(probs_safe), dim=-1)
+    return entropy
+
+
 def add_gumbel_noise(logits, temperature):
     """
     The Gumbel max is a method for sampling categorical distributions.
@@ -157,6 +168,10 @@ def generate_with_margin(
 
             x0 = torch.where(mask_index, x0, x)
             x0_p = margin_function(p[:, prompt.shape[1] :])
+
+            entropy = entropy_function(p[:, prompt.shape[1] :])
+            print("entropy is ******************** ", entropy)
+
             confidence = torch.where(mask_index[:, prompt.shape[1] :], x0_p, -np.inf)
 
             transfer_index = torch.zeros_like(x0, dtype=torch.bool, device=x0.device)
@@ -422,6 +437,7 @@ def get_transfer_index_dynamic(
         raise NotImplementedError(remasking)
 
     x0 = torch.where(mask_index, x0, x)
+
     confidence = torch.where(mask_index, x0_p, -np.inf)
 
     transfer_index = torch.zeros_like(x0, dtype=torch.bool, device=x0.device)

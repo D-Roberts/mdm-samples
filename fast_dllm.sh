@@ -18,6 +18,6 @@ python adaptive_inf.py \
     --data_path data/humaneval20.jsonl \
     --result_path results/humaneval_fast_dllm
 
-# python judge_python_code.py \
-#     --folder_path results/humaneval_fast_dllm \
-#     --output_path results/humaneval_fast_dllm.txt
+python judge_python_code.py \
+    --folder_path results/humaneval_fast_dllm \
+    --output_path results/humaneval_fast_dllm.txt
