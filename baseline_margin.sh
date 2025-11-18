@@ -1,4 +1,4 @@
-python eval.py \
+python adaptive_inf.py \
     --task 'humaneval' \
     --model_name 'GSAI-ML/LLaDA-1.5' \
     --device 'cuda:0' \
