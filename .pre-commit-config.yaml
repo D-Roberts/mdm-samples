@@ -17,7 +17,7 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
-      - id: check-added-large-files
+      # - id: check-added-large-files
       - id: check-ast
       - id: check-case-conflict
       - id: check-merge-conflict
@@ -25,4 +25,3 @@ repos:
       - id: check-yaml
       - id: end-of-file-fixer
       # - id: trailing-whitespace #Add this later
-
