@@ -18,6 +18,7 @@ def add_gumbel_noise(logits, temperature):
     return logits.exp() / gumbel_noise
 
 
+# for baseline
 def margin_function(probabilities):
     if probabilities.dim() != 3:
         raise ValueError(
@@ -54,6 +55,37 @@ def get_num_transfer_tokens(mask_index, steps):
         num_transfer_tokens[i, : remainder[i]] += 1
 
     return num_transfer_tokens
+
+
+def load_baseline(model, baseline_name):
+    global BASE_LINE
+    if BASE_LINE is None:
+        from adaptive_inf import load_json_or_jsonl
+
+        p_baseline_dict = load_json_or_jsonl(baseline_name)
+        token_num_ = p_baseline_dict["num_token"]
+        p_baseline_dict = p_baseline_dict["p_baseline_dict"]
+        del_keys = []
+        for key in p_baseline_dict.keys():
+            del_keys.append(key)
+        for key in del_keys:
+            p_baseline_dict[int(key)] = p_baseline_dict[key]
+        for key in del_keys:
+            del p_baseline_dict[key]
+        for key in p_baseline_dict.keys():
+            p_baseline_dict[key] = p_baseline_dict[key] / token_num_
+        BASE_LINE = torch.full(
+            (126464,), 1 / token_num_, device=model.device, dtype=torch.float32
+        )
+        keys = torch.tensor(
+            list(p_baseline_dict.keys()), device=model.device, dtype=torch.long
+        )
+        values = torch.tensor(
+            list(p_baseline_dict.values()), device=model.device, dtype=torch.float32
+        )
+        BASE_LINE.scatter_(0, keys, values)
+    else:
+        BASE_LINE = BASE_LINE.to(model.device)
 
 
 @torch.no_grad()
@@ -128,6 +160,149 @@ def generate_with_margin(
             for j in range(confidence.shape[0]):
                 _, select_index = torch.topk(confidence[j], k=num_transfer_tokens[j, i])
                 transfer_index[j, select_index + prompt.shape[1]] = True
+                if return_order:
+                    if num_block + 1 not in orders:
+                        orders[num_block + 1] = []
+                    orders[num_block + 1].append(select_index.tolist())
+            x[transfer_index] = x0[transfer_index]
+    if return_order:
+        return x, orders
+    return x
+
+
+def pc_sampler_function(
+    probabilities: torch.Tensor,
+    token_ids: torch.Tensor,
+    lambda_val: float,
+    alpha: float,
+    bg_freq_tensor: torch.Tensor,
+) -> torch.Tensor:
+    if probabilities.shape != token_ids.shape:
+        raise f"probabilities.shape: {probabilities.shape}, token_ids.shape: {token_ids.shape} must be equal"
+
+    device = probabilities.device
+    sequence_len = probabilities.shape[1]
+    f_bg_tensor = bg_freq_tensor[token_ids]
+    epsilon = 1e-9
+    cross_entropy_scores = -probabilities * torch.log(f_bg_tensor + epsilon)
+    cross_entropy_scores = torch.clamp(cross_entropy_scores, max=alpha)
+    positions = torch.arange(sequence_len, device=device, dtype=torch.float32)
+    positional_bias = torch.exp(-lambda_val * positions)
+    final_scores = positional_bias * cross_entropy_scores
+
+    return final_scores
+
+
+@torch.no_grad()
+def generate_with_pc_sampler(
+    model,
+    prompt,
+    steps=128,
+    gen_length=128,
+    block_length=128,
+    lambd=1,
+    alpha=1,
+    baseline_name="P_baseline.json",
+    temperature=0.0,
+    cfg_scale=0.0,
+    remasking="low_confidence",
+    mask_id=126336,
+    return_order=False,
+):
+    # this is the weighing of tokens by frequency to account for bias of confidence toward some tokens
+    global BASE_LINE
+    if BASE_LINE is None:
+        load_baseline(model, baseline_name)
+    if return_order:
+        orders = {}
+
+    x = torch.full((1, prompt.shape[1] + gen_length), mask_id, dtype=torch.long).to(
+        model.device
+    )
+    x[:, : prompt.shape[1]] = prompt.clone()
+
+    prompt_index = x != mask_id
+
+    assert gen_length % block_length == 0
+    num_blocks = gen_length // block_length
+
+    assert steps % num_blocks == 0
+    steps = steps // num_blocks
+
+    for num_block in range(num_blocks):
+        block_mask_index = (
+            x[
+                :,
+                prompt.shape[1]
+                + num_block * block_length : prompt.shape[1]
+                + (num_block + 1) * block_length :,
+            ]
+            == mask_id
+        )
+        num_transfer_tokens = get_num_transfer_tokens(block_mask_index, steps)
+        for i in range(steps):
+            mask_index = x == mask_id
+            if cfg_scale > 0.0:
+                un_x = x.clone()
+                un_x[prompt_index] = mask_id
+                x_ = torch.cat([x, un_x], dim=0)
+                logits = model(x_).logits
+                logits, un_logits = torch.chunk(logits, 2, dim=0)
+                logits = un_logits + (cfg_scale + 1) * (logits - un_logits)
+            else:
+                logits = model(x).logits
+
+            logits_with_noise = add_gumbel_noise(logits, temperature=temperature)
+            x0 = torch.argmax(logits_with_noise, dim=-1)  # b, l
+
+            if remasking == "low_confidence":
+                p = F.softmax(logits, dim=-1)
+                x0_p = torch.squeeze(
+                    torch.gather(p, dim=-1, index=torch.unsqueeze(x0, -1)), -1
+                )  # b, l
+            elif remasking == "random":
+                x0_p = torch.rand((x0.shape[0], x0.shape[1]), device=x0.device)
+            else:
+                raise NotImplementedError(remasking)
+
+            x0_p[:, prompt.shape[1] + (num_block + 1) * block_length :] = -np.inf
+
+            x0 = torch.where(mask_index, x0, x)
+
+            x0_p = pc_sampler_function(
+                probabilities=x0_p[
+                    :,
+                    prompt.shape[1]
+                    + num_block * block_length : prompt.shape[1]
+                    + (num_block + 1) * block_length,
+                ],
+                token_ids=x0[
+                    :,
+                    prompt.shape[1]
+                    + num_block * block_length : prompt.shape[1]
+                    + (num_block + 1) * block_length,
+                ],
+                lambda_val=lambd,
+                alpha=alpha,
+                bg_freq_tensor=BASE_LINE,
+            )
+
+            confidence = torch.where(
+                mask_index[
+                    :,
+                    prompt.shape[1]
+                    + num_block * block_length : prompt.shape[1]
+                    + (num_block + 1) * block_length,
+                ],
+                x0_p,
+                -np.inf,
+            )
+            transfer_index = torch.zeros_like(x0, dtype=torch.bool, device=x0.device)
+            for j in range(confidence.shape[0]):
+                _, select_index = torch.topk(confidence[j], k=num_transfer_tokens[j, i])
+                transfer_index[
+                    j, select_index + prompt.shape[1] + num_block * block_length
+                ] = True
                 if return_order:
                     if num_block + 1 not in orders:
                         orders[num_block + 1] = []
