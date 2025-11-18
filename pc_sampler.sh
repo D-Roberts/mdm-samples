@@ -18,5 +18,5 @@ python adaptive_inf.py \
     --result_path results/humaneval_margin
 
 python judge_python_code.py \
-    --folder_path results/humaneval_margin \
-    --output_path results/humaneval_margin.txt
+    --folder_path results/humaneval_pc_sampler \
+    --output_path results/humaneval_pc_sampler.txt

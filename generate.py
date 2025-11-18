@@ -314,3 +314,59 @@ def generate_with_pc_sampler(
     if return_order:
         return x, orders
     return x
+
+
+@torch.no_grad()
+def generate_with_eb_sampler(
+    model,
+    prompt,
+    gamma=0.1,
+    gen_length=128,
+    temperature=0.0,
+    cfg_scale=0.0,
+    mask_id=126336,
+):
+    x = torch.full((1, prompt.shape[1] + gen_length), mask_id, dtype=torch.long).to(
+        model.device
+    )
+    x[:, : prompt.shape[1]] = prompt.clone()
+    prompt_index = x != mask_id
+
+    while (x == mask_id).any():
+        mask_index = x == mask_id
+
+        if cfg_scale > 0.0:
+            un_x = x.clone()
+            un_x[prompt_index] = mask_id
+            x_ = torch.cat([x, un_x], dim=0)
+            logits = model(x_).logits
+            logits, un_logits = torch.chunk(logits, 2, dim=0)
+            logits = un_logits + (cfg_scale + 1) * (logits - un_logits)
+        else:
+            logits = model(x).logits
+
+        logits_with_noise = add_gumbel_noise(logits, temperature=temperature)
+        predicted_tokens = torch.argmax(logits_with_noise, dim=-1)
+        masked_logits = logits[mask_index]
+
+        err_proxy = torch.distributions.Categorical(logits=masked_logits).entropy()
+
+        masked_token_indices = mask_index.nonzero(as_tuple=True)[1]
+        sorted_err_indices = torch.argsort(err_proxy)
+        sorted_indices = masked_token_indices[sorted_err_indices]
+
+        sorted_entropies = err_proxy[sorted_err_indices]
+
+        acc_entropy = torch.cumsum(sorted_entropies, dim=0)
+        cummax_entropy = torch.cummax(sorted_entropies, dim=0).values
+
+        k = (acc_entropy - cummax_entropy <= gamma).sum()
+
+        num_masks_available = len(sorted_indices)
+        k = torch.clamp(k, min=1, max=num_masks_available)
+
+        indices_to_unmask = sorted_indices[:k]
+
+        x[0, indices_to_unmask] = predicted_tokens[0, indices_to_unmask]
+
+    return x
