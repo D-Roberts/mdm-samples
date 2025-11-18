@@ -7,7 +7,7 @@ import torch
 from tqdm import tqdm
 
 from transformers import AutoTokenizer, AutoModel
-from utils.eval_utils import load_dataset, evaluate, query_extract
+from src.eval_utils import load_dataset, evaluate, query_extract
 
 current_script_path = os.path.abspath(__file__)
 scripts_dir = os.path.dirname(current_script_path)
