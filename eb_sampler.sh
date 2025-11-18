@@ -1,7 +1,7 @@
 export HF_ALLOW_CODE_EVAL=1
 export HF_DATASETS_TRUST_REMOTE_CODE=true
 
-echo "---------------------------EB-Sampler---------------------------"
+echo "--------------------------Fast-dLLM-------------------------"
 
 echo "---------------------------Eval HumanEval---------------------------"
 
