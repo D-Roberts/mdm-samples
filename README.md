@@ -38,4 +38,6 @@ Samples will be provided here in a jsonl file.
 ### Code references:
 https://github.com/NEUIR/PC-Sampler
 
+https://github.com/D-Roberts/LLaDA
+
 https://github.com/smarter-vlm/smarter
