@@ -141,7 +141,7 @@ def generate(
 
     # the baseline and compared methods
     if mode == "margin":
-        from src.generate import generate_with_margin
+        from generate import generate_with_margin
 
         out = generate_with_margin(
             model,
