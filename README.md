@@ -1,4 +1,4 @@
-### This repository contains supporting code for the work ``Understanding Efficiency vs Precision Tradeoffs in Parallel Sampling with MDMs: A Quantitative Study''
+### This repository contains supporting code for the work ``Understanding Efficiency vs Precision Tradeoffs in Parallel Sampling with MDMs: A Quantitative Study'', a research project for DL course@NYU.
 
 
 ### To work with the codebase, please create a conda envorinment and install dependencies, as such:
