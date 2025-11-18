@@ -3,6 +3,9 @@ import numpy as np
 import torch.nn.functional as F
 import torch
 
+# this is for pc_sampler weights
+BASE_LINE = None
+
 
 def add_gumbel_noise(logits, temperature):
     """

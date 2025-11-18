@@ -264,7 +264,9 @@ if __name__ == "__main__":
     parser.add_argument("--lambd", type=float, default=0.25)
     parser.add_argument("--alpha", type=float, default=10)
     parser.add_argument(
-        "--baseline_name", type=str, default="../data/baseline/reference_corpus.json"
+        "--baseline_name",
+        type=str,
+        default="/data/baseline/reference_corpus_llada.json",
     )
     parser.add_argument("--thread", type=float, default=0.9)
     parser.add_argument("--gamma", type=float, default=0.01)
