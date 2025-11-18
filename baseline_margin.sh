@@ -3,7 +3,7 @@ python eval.py \
     --model_name 'GSAI-ML/LLaDA-1.5' \
     --device 'cuda:0' \
     --gen_length 128 \
-    --steps 64 \
+    --steps 4 \
     --block_length 128 \
     --mode margin \
     --data_path data/humaneval20.jsonl \
