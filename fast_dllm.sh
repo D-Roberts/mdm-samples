@@ -12,7 +12,7 @@ python adaptive_inf.py \
     --device 'cuda:0' \
     --gen_length 128 \
     --steps 64 \
-    --block_length 128 \
+    --block_length 32 \
     --mode fast_dllm \
     --thread 0.9 \
     --data_path data/humaneval20.jsonl \
