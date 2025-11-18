@@ -9,6 +9,6 @@ python eval.py \
     --data_path ../data/humaneval20.jsonl \
     --result_path ../results/humaneval_margin
 
-python ../utils/judge_python_code.py \
+python ../src/judge_python_code.py \
     --folder_path ../results/humaneval_margin \
     --output_path ../results/humaneval_margin.txt
