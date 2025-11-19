@@ -210,7 +210,7 @@ def pc_sampler_function(
 
     print(f"cross entropy scores in pc sampler fn {cross_entropy_scores} ")
     print(
-        f"so then perplexity min and max {min(torch.exp(cross_entropy_scores)) and max(torch.exp(cross_entropy_scores))}"
+        f"so then perplexity min and max {min(torch.exp(cross_entropy_scores))} and {max(torch.exp(cross_entropy_scores))}"
     )
 
     positions = torch.arange(sequence_len, device=device, dtype=torch.float32)
