@@ -69,13 +69,13 @@ def main():
         f.write(f"Total files: {total_files}\n")
         f.write(f"Successful files: {success_count}\n")
         f.write(f"Accuracy: {accuracy:.2f}%\n\n")
-        f.write("=== Detailed Results ===\n")
-        for file_path, status, message in results:
-            f.write(f"File: {file_path}\n")
-            f.write(f"Status: {status}\n")
-            if message:
-                f.write(f"Message: {message}\n")
-            f.write("-" * 40 + "\n")
+        # f.write("=== Detailed Results ===\n")
+        # for file_path, status, message in results:
+        #     f.write(f"File: {file_path}\n")
+        #     f.write(f"Status: {status}\n")
+        #     if message:
+        #         f.write(f"Message: {message}\n")
+        #     f.write("-" * 40 + "\n")
 
     print(f"Execution completed! Results saved to {args.output_path}")
     print(f"Overall accuracy: {accuracy:.2f}%")
