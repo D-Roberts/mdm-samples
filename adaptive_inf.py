@@ -233,6 +233,7 @@ def main(args):
 
     results = []
     entropies = []
+
     for input in tqdm(dataset):
         answer, entropy = generate(
             model,
@@ -255,6 +256,7 @@ def main(args):
         entropies.append(entropy)
 
     evaluate(task, results, dataset, result_path, args)
+    print(f"entropies were {entropies} in number {len(entropies)}")
 
     print("----------------- Done -------------------")
 
