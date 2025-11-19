@@ -94,7 +94,7 @@ def get_log_likelihood(
 
         perplex = torch.exp(loss)
 
-        print(f"perplex as exp avg loss per seq {perplex.shape} {perplex}")
+        print(f"perplex as exp avg loss per seq {perplex.shape} {perplex.item(): .4f}")
         loss = loss.sum() / batch_size
 
         loss_.append(loss.item())
