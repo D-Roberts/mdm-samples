@@ -1,6 +1,7 @@
 import random
 import os
 import json
+import time
 import sys
 import argparse
 import numpy as np
@@ -101,7 +102,6 @@ def eval_humaneval(results, dataset, result_dir):
 
     for index, answer in enumerate(results):
         # print(f"canonical solution is {dataset[index]['canonical_solution']}\n")
-
         # print(f"while the answer was {answer}\n")
 
         code_path = f"{result_dir}/{index + 1}.py"
@@ -244,6 +244,7 @@ def main(args):
         "thread": thread,
         "method_metrics": {},
     }
+    start_time = time.perf_counter()
 
     for input in tqdm(dataset):
         answer, entropy = generate(
@@ -266,6 +267,10 @@ def main(args):
         results.append(answer)
         entropies.append(entropy)
 
+    end_time = time.perf_counter()
+    time_margin = end_time - start_time
+    print(f"Execution time for the 20: {time_margin:.6f} seconds")
+
     evaluate(task, results, dataset, result_path, args)
     entp = np.array(entropies)
 
@@ -273,6 +278,7 @@ def main(args):
         "point_est": np.mean(entp),
         "sample_std": np.std(entp, ddof=1),
     }
+    metrics_dict["method_metrics"]["seconds_per_20eg"] = time_margin
     print(f"metrics dict {metrics_dict}")
 
     print("----------------- Done -------------------")
