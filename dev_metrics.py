@@ -151,7 +151,9 @@ def main():
             f"/home/ubuntu/mdm-samples/results/humaneval_results/ground_truth/{i}.py"
         )
         # file_path_answer = (f"/Users/dr/research/mdm-samples/results/humaneval_results/{i}.py")
-        file_path_answer = f"/home/ubuntu/mdm-samples/results/humaneval_results/{i}.py"
+        file_path_answer = (
+            f"/home/ubuntu/mdm-samples/results/humaneval_pc_sampler/{i}.py"
+        )
 
         print(f"for case {i} *** ")
         try:
