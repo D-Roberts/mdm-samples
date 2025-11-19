@@ -144,10 +144,11 @@ def generate(
     prompt = torch.tensor(prompt).to(model.device).unsqueeze(0)
 
     # the baseline and compared methods
+
     if mode == "margin":
         from generate import generate_with_margin
 
-        out = generate_with_margin(
+        out, entropy = generate_with_margin(
             model,
             prompt,
             steps,
@@ -157,6 +158,7 @@ def generate(
             cfg_scale=0.0,
             remasking="low_confidence",
         )
+
     elif mode == "pc_sampler":
         from generate import generate_with_pc_sampler
 
@@ -196,7 +198,7 @@ def generate(
     answer = tokenizer.batch_decode(
         out[:, prompt.shape[1] :], skip_special_tokens=True
     )[0]
-    return answer
+    return answer, entropy
 
 
 def main(args):
@@ -230,8 +232,9 @@ def main(args):
     print("----------------- Start Answering -------------------")
 
     results = []
+    entropies = []
     for input in tqdm(dataset):
-        answer = generate(
+        answer, entropy = generate(
             model,
             tokenizer,
             input,
@@ -249,6 +252,7 @@ def main(args):
             num_remask_tokens,
         )
         results.append(answer)
+        entropies.append(entropy)
 
     evaluate(task, results, dataset, result_path, args)
 

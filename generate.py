@@ -130,8 +130,6 @@ def generate_with_margin(
     assert steps % num_blocks == 0
     steps = steps // num_blocks
 
-    # last step
-    entropies = []
     for num_block in range(num_blocks):
         block_mask_index = (
             x[
@@ -173,7 +171,6 @@ def generate_with_margin(
 
             if i == steps - 1:
                 entropy = -entropy_function(p[:, prompt.shape[1] :]).sum() / gen_length
-                entropies.append(entropy)
 
             confidence = torch.where(mask_index[:, prompt.shape[1] :], x0_p, -np.inf)
 
@@ -186,11 +183,8 @@ def generate_with_margin(
                         orders[num_block + 1] = []
                     orders[num_block + 1].append(select_index.tolist())
             x[transfer_index] = x0[transfer_index]
-    print(f"entropies were **************** {entropies}")
 
-    if return_order:
-        return x, orders
-    return x
+    return x, entropy.detach().cpu().item()
 
 
 def pc_sampler_function(
