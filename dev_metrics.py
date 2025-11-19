@@ -124,7 +124,8 @@ def get_log_likelihood(
     return ret
 
 
-file_path = "/Users/dr/research/mdm-samples/results/humaneval_results/ground_truth/1.py"
+# file_path = "/Users/dr/research/mdm-samples/results/humaneval_results/ground_truth/1.py"
+file_path = "/home/ubuntu/mdm-samples/results/humaneval_results/ground_truth/1.py"
 
 try:
     with open(file_path, "r") as file:
@@ -139,7 +140,7 @@ except Exception as e:
 
 def main():
     device = "cuda"
-    model_name = "GSAI-ML/LLaDA-1.5"
+    model_name = "GSAI-ML/LLaDA-8B-Instruct"
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
     # vocabulary  size 126464;
 
