@@ -150,7 +150,7 @@ def main():
         file_path = (
             f"/home/ubuntu/mdm-samples/results/humaneval_results/ground_truth/{i}.py"
         )
-
+        print(f"for file {i} *** ")
         try:
             with open(file_path, "r") as file:
                 file_content = file.read()
