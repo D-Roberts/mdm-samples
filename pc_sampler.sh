@@ -8,7 +8,7 @@ python adaptive_inf.py \
     --model_name 'GSAI-ML/LLaDA-1.5' \
     --device 'cuda:0' \
     --gen_length 128 \
-    --steps 64 \
+    --steps 4 \
     --block_length 128 \
     --mode pc_sampler \
     --lambd 0.25 \
