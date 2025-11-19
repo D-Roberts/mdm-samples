@@ -91,14 +91,15 @@ def get_log_likelihood(
             F.cross_entropy(logits[mask_index], seq[mask_index], reduction="none")
             / p_mask[mask_index]
         )
+        perplex = torch.exp(loss)
+        print(
+            f"perplex as exp avg loss per seq {perplex.shape} {perplex[0].item(): .4f}"
+        )
 
         loss = loss.sum() / batch_size
 
         loss_.append(loss.item())
         ret = -sum(loss_) / len(loss_)
-
-        perplex = torch.exp(ret)
-        print(f"perplex as exp avg loss per seq {perplex.shape} {perplex: .4f}")
 
     return ret
 
