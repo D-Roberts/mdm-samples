@@ -167,10 +167,10 @@ def main():
     # print(f"tokenized ground tokens input ids are of shape {answer_tokens.shape} and value {answer_tokens}")
 
     ref = get_log_likelihood(model, ground_tokens, answer_tokens, mc_num=128)
-    # print(f"the ref log likelihood ******** {ref}")
-    # current = get_log_likelihood(model, ground_tokens, answer_tokens, mc_num=64)
-    # ratio = current - ref
-    # print(f"Log likelihood ratio is: {ratio}")
+    print(f"the ref log likelihood ******** {ref}")
+    current = get_log_likelihood(model, ground_tokens, answer_tokens, mc_num=64)
+    ratio = current - ref
+    print(f"Log likelihood ratio is: {ratio}")
 
 
 if __name__ == "__main__":
