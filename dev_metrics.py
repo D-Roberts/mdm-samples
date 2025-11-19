@@ -160,7 +160,7 @@ def main():
             with open(file_path_ground, "r") as file:
                 file_content_ground = file.read()
             # print("File content as a string:")
-            print(file_content_ground)
+            # print(file_content_ground)
         except FileNotFoundError:
             print(f"Error: The file '{file_path_ground}' was not found.")
         except Exception as e:
@@ -170,7 +170,7 @@ def main():
             with open(file_path_answer, "r") as file:
                 file_content_answer = file.read()
             # print("File content as a string:")
-            print(file_content_answer)
+            # print(file_content_answer)
         except FileNotFoundError:
             print(f"Error: The file '{file_path_answer}' was not found.")
         except Exception as e:
