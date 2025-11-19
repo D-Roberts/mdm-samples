@@ -1,6 +1,6 @@
 python adaptive_inf.py \
     --task 'humaneval' \
-    --model_name 'GSAI-ML/LLaDA-1.5' \
+    --model_name 'GSAI-ML/LLaDA-8B-Instruct' \
     --device 'cuda:0' \
     --gen_length 128 \
     --steps 4 \

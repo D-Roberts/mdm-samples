@@ -1,13 +1,13 @@
 export HF_ALLOW_CODE_EVAL=1
 export HF_DATASETS_TRUST_REMOTE_CODE=true
 
-echo "--------------------------Fast-dLLM-------------------------"
+echo "---------------------------EB-Sampler---------------------------"
 
 echo "---------------------------Eval HumanEval---------------------------"
 
 python adaptive_inf.py \
     --task 'humaneval' \
-    --model_name 'GSAI-ML/LLaDA-1.5' \
+    --model_name 'GSAI-ML/LLaDA-8B-Instruct' \
     --device 'cuda:0' \
     --gen_length 128 \
     --steps 64 \

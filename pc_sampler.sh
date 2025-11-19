@@ -5,7 +5,7 @@ echo "---------------------------PC-Sampler---------------------------"
 
 python adaptive_inf.py \
     --task 'humaneval' \
-    --model_name 'GSAI-ML/LLaDA-1.5' \
+    --model_name 'GSAI-ML/LLaDA-8B-Instruct' \
     --device 'cuda:0' \
     --gen_length 128 \
     --steps 4 \
@@ -15,7 +15,7 @@ python adaptive_inf.py \
     --alpha 10 \
     --baseline_name /home/ubuntu/mdm-samples/data/baseline/reference_corpus_llada.json \
     --data_path data/humaneval20.jsonl \
-    --result_path results/humaneval_margin
+    --result_path results/humaneval_pc_sampler
 
 python judge_python_code.py \
     --folder_path results/humaneval_pc_sampler \

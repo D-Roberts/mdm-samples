@@ -93,8 +93,8 @@ def get_log_likelihood(
         )
         perplex = torch.exp(loss)
 
-        print(f"logits[mask_index] shape {logits[mask_index].shape}")
-        print(f"seq[mask_index] shape {seq[mask_index].shape}")
+        print(f"logits[mask_index] values {logits[mask_index][0]}")
+        print(f"seq[mask_index] values {seq[mask_index][0]}")
         print(f"p_mask[mask_index] shape {p_mask[mask_index]}")
 
         print(
