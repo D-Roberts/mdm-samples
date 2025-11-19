@@ -145,7 +145,7 @@ def main():
     # prompt = "Roof shingle removal: A man is sitting on a roof. He"
     # answer = " is using wrap to wrap a pair of skis."
 
-    for i in range(1, 10):
+    for i in range(1, 21):
         # file_path_ground = f"/Users/dr/research/mdm-samples/results/humaneval_results/ground_truth/{i}.py"
         file_path_ground = (
             f"/home/ubuntu/mdm-samples/results/humaneval_results/ground_truth/{i}.py"
@@ -157,7 +157,7 @@ def main():
         try:
             with open(file_path_ground, "r") as file:
                 file_content_ground = file.read()
-            print("File content as a string:")
+            # print("File content as a string:")
             print(file_content_ground)
         except FileNotFoundError:
             print(f"Error: The file '{file_path_ground}' was not found.")
