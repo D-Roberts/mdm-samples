@@ -230,67 +230,69 @@ def main(args):
     model.eval()
 
     print("----------------- Start Answering -------------------")
+    all_metrics = dict()
 
-    results = []
-    entropies = []
-    metrics_dict = {
-        "steps": steps,
-        "block_length": block_length,
-        "gen_length": gen_length,
-        "method": mode,
-        "lambd": lambd,
-        "alpha": alpha,
-        "gamma": gamma,
-        "thread": thread,
-        "method_metrics": {},
-    }
-    start_time = time.perf_counter()
+    for steps in [32, 64, 128]:
+        results = []
+        entropies = []
+        metrics_dict = {
+            "steps": steps,
+            "block_length": block_length,
+            "gen_length": gen_length,
+            "method": mode,
+            "lambd": lambd,
+            "alpha": alpha,
+            "gamma": gamma,
+            "thread": thread,
+            "method_metrics": {},
+        }
+        start_time = time.perf_counter()
 
-    for input in tqdm(dataset):
-        answer, entropy = generate(
-            model,
-            tokenizer,
-            input,
-            task,
-            steps,
-            gen_length,
-            block_length,
-            temperature,
-            mode,
-            lambd,
-            alpha,
-            corpus_name,
-            thread,
-            gamma,
-            num_remask_tokens,
-        )
-        results.append(answer)
-        entropies.append(entropy)
+        for input in tqdm(dataset):
+            answer, entropy = generate(
+                model,
+                tokenizer,
+                input,
+                task,
+                steps,
+                gen_length,
+                block_length,
+                temperature,
+                mode,
+                lambd,
+                alpha,
+                corpus_name,
+                thread,
+                gamma,
+                num_remask_tokens,
+            )
+            results.append(answer)
+            entropies.append(entropy)
 
-    end_time = time.perf_counter()
-    time_margin = end_time - start_time
-    print(f"Execution time for the 20: {time_margin:.6f} seconds")
+        end_time = time.perf_counter()
+        time_margin = end_time - start_time
+        print(f"Execution time for the 20: {time_margin:.6f} seconds")
 
-    evaluate(task, results, dataset, result_path, args)
-    entp = np.array(entropies)
+        evaluate(task, results, dataset, result_path, args)
+        entp = np.array(entropies)
 
-    metrics_dict["method_metrics"]["entropy"] = {
-        "point_est": np.mean(entp),
-        "sample_std": np.std(entp, ddof=1),
-    }
-    metrics_dict["method_metrics"]["seconds_per_20eg"] = time_margin
-    print(f"metrics dict {metrics_dict}")
+        metrics_dict["method_metrics"]["entropy"] = {
+            "point_est": np.mean(entp),
+            "sample_std": np.std(entp, ddof=1),
+        }
+        metrics_dict["method_metrics"]["seconds_per_20eg"] = time_margin
+        print(f"metrics dict {metrics_dict}")
 
-    print("----------------- Done -------------------")
+        print("----------------- Done -------------------")
 
-    metrics_json = f"metrics_{RUN_ID}.json"
+        metrics_json = f"metrics_{RUN_ID}.json"
 
-    # Open the file in write mode and use json.dump() to save the dictionary
-    with open(metrics_json, "w") as f:
-        json.dump(
-            metrics_dict, f, indent=4
-        )  # indent=4 makes the JSON output human-readable
-    print(f"Metrics saved to {metrics_json}")
+        # Open the file in write mode and use json.dump() to save the dictionary
+        with open(metrics_json, "w") as f:
+            json.dump(
+                metrics_dict, f, indent=4
+            )  # indent=4 makes the JSON output human-readable
+        print(f"Metrics saved to {metrics_json}")
 
 
 if __name__ == "__main__":
