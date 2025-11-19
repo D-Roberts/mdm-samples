@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 from transformers import AutoTokenizer, AutoModel
 
-
+RUN_ID = 1
 # current_script_path = os.path.abspath(__file__)
 # scripts_dir = os.path.dirname(current_script_path)
 # project_root = os.path.dirname(scripts_dir)
@@ -283,7 +283,7 @@ def main(args):
 
     print("----------------- Done -------------------")
 
-    metrics_json = f"metrics_{mode}.json"
+    metrics_json = f"metrics_{RUN_ID}.json"
 
     # Open the file in write mode and use json.dump() to save the dictionary
     with open(metrics_json, "w") as f:

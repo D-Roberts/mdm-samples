@@ -4,6 +4,9 @@ import concurrent.futures
 import sys
 from pathlib import Path
 import argparse
+import json
+
+from adaptive_inf import RUN_ID
 
 
 def run_python_file(file_path):
@@ -79,6 +82,19 @@ def main():
 
     print(f"Execution completed! Results saved to {args.output_path}")
     print(f"Overall accuracy: {accuracy:.2f}%")
+    metrics_json = f"metrics_{RUN_ID}.json"
+    with open(metrics_json, "r") as file:
+        metrics_dict = json.load(file)
+
+    print(f"loaded metrics json {metrics_dict}")
+    metrics_dict["method_metrics"]["accuracy"] = accuracy
+
+    # save it
+    with open(metrics_json, "w") as f:
+        json.dump(
+            metrics_dict, f, indent=4
+        )  # indent=4 makes the JSON output human-readable
+    print(f"Metrics saved to {metrics_json}")
 
 
 if __name__ == "__main__":
