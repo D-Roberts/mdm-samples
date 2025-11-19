@@ -128,7 +128,7 @@ def generate(
     mode,
     lambd,
     alpha,
-    baseline_name,
+    corpus_name,
     thread,
     gamma,
     num_remask_tokens=10,
@@ -168,7 +168,7 @@ def generate(
             block_length,
             lambd,
             alpha,
-            baseline_name,
+            corpus_name,
             temperature,
             cfg_scale=0.0,
             remasking="low_confidence",
@@ -210,7 +210,7 @@ def main(args):
     mode = args.mode
     lambd = args.lambd
     alpha = args.alpha
-    baseline_name = args.baseline_name
+    corpus_name = args.corpus_name
     thread = args.thread
     gamma = args.gamma
     num_remask_tokens = args.num_remask_tokens
@@ -243,7 +243,7 @@ def main(args):
             mode,
             lambd,
             alpha,
-            baseline_name,
+            corpus_name,
             thread,
             gamma,
             num_remask_tokens,
@@ -258,7 +258,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--task", type=str, default="humaneval")
-    parser.add_argument("--model_name", type=str, default="GSAI-ML/LLaDA-1.5")
+    parser.add_argument("--model_name", type=str, default="GSAI-ML/LLaDA-8B-Instruct")
     parser.add_argument("--device", type=str, default="cuda:0")
     parser.add_argument("--gen_length", type=int, default=128)
     parser.add_argument("--steps", type=int, default=64)
@@ -268,9 +268,9 @@ if __name__ == "__main__":
     parser.add_argument("--lambd", type=float, default=0.25)
     parser.add_argument("--alpha", type=float, default=10)
     parser.add_argument(
-        "--baseline_name",
+        "--corpus_name",
         type=str,
-        default="data/baseline/reference_corpus_llada.json",
+        default="data/corpus/reference_corpus_llada.json",
     )
     parser.add_argument("--thread", type=float, default=0.9)
     parser.add_argument("--gamma", type=float, default=0.01)

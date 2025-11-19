@@ -13,7 +13,7 @@ python adaptive_inf.py \
     --mode pc_sampler \
     --lambd 0.25 \
     --alpha 10 \
-    --baseline_name /home/ubuntu/mdm-samples/data/baseline/reference_corpus_llada.json \
+    --corpus_name /home/ubuntu/mdm-samples/data/corpus/reference_corpus_llada.json \
     --data_path data/humaneval20.jsonl \
     --result_path results/humaneval_pc_sampler
 

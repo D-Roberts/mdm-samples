@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import torch
 
 # this is for pc_sampler weights
-BASE_LINE = None
+CORPUS = None
 
 
 def entropy_function(probabilities):
@@ -71,35 +71,35 @@ def get_num_transfer_tokens(mask_index, steps):
     return num_transfer_tokens
 
 
-def load_baseline(model, baseline_name):
-    global BASE_LINE
-    if BASE_LINE is None:
+def load_corpus(model, corpus_name):
+    global CORPUS
+    if CORPUS is None:
         from adaptive_inf import load_json_or_jsonl
 
-        p_baseline_dict = load_json_or_jsonl(baseline_name)
-        token_num_ = p_baseline_dict["num_token"]
-        p_baseline_dict = p_baseline_dict["p_baseline_dict"]
+        corpus_dict = load_json_or_jsonl(corpus_name)
+        token_num_ = corpus_dict["num_token"]
+        corpus_dict = corpus_dict["corpus_dict"]
         del_keys = []
-        for key in p_baseline_dict.keys():
+        for key in corpus_dict.keys():
             del_keys.append(key)
         for key in del_keys:
-            p_baseline_dict[int(key)] = p_baseline_dict[key]
+            corpus_dict[int(key)] = corpus_dict[key]
         for key in del_keys:
-            del p_baseline_dict[key]
-        for key in p_baseline_dict.keys():
-            p_baseline_dict[key] = p_baseline_dict[key] / token_num_
-        BASE_LINE = torch.full(
+            del corpus_dict[key]
+        for key in corpus_dict.keys():
+            corpus_dict[key] = corpus_dict[key] / token_num_
+        CORPUS = torch.full(
             (126464,), 1 / token_num_, device=model.device, dtype=torch.float32
         )
         keys = torch.tensor(
-            list(p_baseline_dict.keys()), device=model.device, dtype=torch.long
+            list(corpus_dict.keys()), device=model.device, dtype=torch.long
         )
         values = torch.tensor(
-            list(p_baseline_dict.values()), device=model.device, dtype=torch.float32
+            list(corpus_dict.values()), device=model.device, dtype=torch.float32
         )
-        BASE_LINE.scatter_(0, keys, values)
+        CORPUS.scatter_(0, keys, values)
     else:
-        BASE_LINE = BASE_LINE.to(model.device)
+        CORPUS = CORPUS.to(model.device)
 
 
 @torch.no_grad()
@@ -229,7 +229,7 @@ def generate_with_pc_sampler(
     block_length=128,
     lambd=1,
     alpha=1,
-    baseline_name="P_baseline.json",
+    corpus_name="corpus.json",
     temperature=0.0,
     cfg_scale=0.0,
     remasking="low_confidence",
@@ -237,9 +237,9 @@ def generate_with_pc_sampler(
     return_order=False,
 ):
     # this is the weighing of tokens by frequency to account for bias of confidence toward some tokens
-    global BASE_LINE
-    if BASE_LINE is None:
-        load_baseline(model, baseline_name)
+    global CORPUS
+    if CORPUS is None:
+        load_corpus(model, corpus_name)
     if return_order:
         orders = {}
 
@@ -311,7 +311,7 @@ def generate_with_pc_sampler(
                 ],
                 lambda_val=lambd,
                 alpha=alpha,
-                bg_freq_tensor=BASE_LINE,
+                bg_freq_tensor=CORPUS,
             )
 
             confidence = torch.where(

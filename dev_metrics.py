@@ -16,6 +16,21 @@ torch.cuda.manual_seed(0)
 torch.cuda.manual_seed_all(0)
 torch.backends.cudnn.deterministic = True
 
+# device = "mps"
+# tokenizer = AutoTokenizer.from_pretrained(
+#     "bert-base-uncased",
+#     trust_remote_code=True,
+#     # padding="max_length",
+#     # max_length=16,
+#     # truncation=True,
+# )
+# model = AutoModelForCausalLM.from_pretrained(
+#     "bert-base-uncased", trust_remote_code=True, is_decoder=True
+# )
+
+# model.to(device)
+# model.eval()
+
 
 def forward_process(batch, prompt_index, mask_id):
     b, l = batch.shape
@@ -109,8 +124,20 @@ def get_log_likelihood(
     return ret
 
 
+file_path = "/Users/dr/research/mdm-samples/results/humaneval_results/ground_truth/1.py"
+
+try:
+    with open(file_path, "r") as file:
+        file_content = file.read()
+    # print("File content as a string:")
+    # print(file_content)
+except FileNotFoundError:
+    print(f"Error: The file '{file_path}' was not found.")
+except Exception as e:
+    print(f"An error occurred: {e}")
+
+
 def main():
-    # load model once at start
     device = "cuda"
     model_name = "GSAI-ML/LLaDA-1.5"
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
@@ -127,16 +154,22 @@ def main():
     # print(model)
 
     # Likelihood ratio test
-    # this prompt and answer is from Hellaswag dataset
-    prompt = "Roof shingle removal: A man is sitting on a roof. He"
-    answer = " is using wrap to wrap a pair of skis."
 
-    prompt = torch.tensor(tokenizer(prompt)["input_ids"]).to(device)
-    answer = torch.tensor(tokenizer(answer)["input_ids"]).to(device)
-    ref = get_log_likelihood(model, prompt, answer, mc_num=128)
-    current = get_log_likelihood(model, prompt, answer, mc_num=64)
-    ratio = current - ref
-    print(f"Log likelihood ratio is: {ratio}")
+    # prompt = "Roof shingle removal: A man is sitting on a roof. He"
+    # answer = " is using wrap to wrap a pair of skis."
+
+    ground_tokens = torch.tensor(tokenizer(file_content)["input_ids"]).to(device)
+    # print(f"tokenized ground tokens input ids are of shape {ground_tokens.shape} and value {ground_tokens}")
+
+    # set dummy answer the same as ground truth to test this.
+    answer_tokens = torch.tensor(tokenizer(file_content)["input_ids"]).to(device)
+    # print(f"tokenized ground tokens input ids are of shape {answer_tokens.shape} and value {answer_tokens}")
+
+    ref = get_log_likelihood(model, ground_tokens, answer_tokens, mc_num=128)
+    # print(f"the ref log likelihood ******** {ref}")
+    # current = get_log_likelihood(model, ground_tokens, answer_tokens, mc_num=64)
+    # ratio = current - ref
+    # print(f"Log likelihood ratio is: {ratio}")
 
 
 if __name__ == "__main__":
