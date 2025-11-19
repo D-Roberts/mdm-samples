@@ -20,9 +20,9 @@ torch.backends.cudnn.deterministic = True
 # tokenizer = AutoTokenizer.from_pretrained(
 #     "bert-base-uncased",
 #     trust_remote_code=True,
-#     # padding="max_length",
-#     # max_length=16,
-#     # truncation=True,
+#     padding="max_length",
+#     max_length=16,
+#     truncation=True,
 # )
 # model = AutoModelForCausalLM.from_pretrained(
 #     "bert-base-uncased", trust_remote_code=True, is_decoder=True
@@ -145,27 +145,44 @@ def main():
     # prompt = "Roof shingle removal: A man is sitting on a roof. He"
     # answer = " is using wrap to wrap a pair of skis."
 
-    for i in range(2, 21):
-        # file_path = "/Users/dr/research/mdm-samples/results/humaneval_results/ground_truth/1.py"
-        file_path = (
+    for i in range(1, 10):
+        # file_path_ground = f"/Users/dr/research/mdm-samples/results/humaneval_results/ground_truth/{i}.py"
+        file_path_ground = (
             f"/home/ubuntu/mdm-samples/results/humaneval_results/ground_truth/{i}.py"
         )
-        print(f"for file {i} *** ")
+        # file_path_answer = (f"/Users/dr/research/mdm-samples/results/humaneval_results/{i}.py")
+        file_path_answer = f"/home/ubuntu/mdm-samples/results/humaneval_results/{i}.py"
+
+        print(f"for case {i} *** ")
         try:
-            with open(file_path, "r") as file:
-                file_content = file.read()
-            # print("File content as a string:")
-            # print(file_content)
+            with open(file_path_ground, "r") as file:
+                file_content_ground = file.read()
+            print("File content as a string:")
+            print(file_content_ground)
         except FileNotFoundError:
-            print(f"Error: The file '{file_path}' was not found.")
+            print(f"Error: The file '{file_path_ground}' was not found.")
         except Exception as e:
             print(f"An error occurred: {e}")
 
-        ground_tokens = torch.tensor(tokenizer(file_content)["input_ids"]).to(device)
+        try:
+            with open(file_path_answer, "r") as file:
+                file_content_answer = file.read()
+            print("File content as a string:")
+            print(file_content_answer)
+        except FileNotFoundError:
+            print(f"Error: The file '{file_path_answer}' was not found.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+        ground_tokens = torch.tensor(tokenizer(file_content_ground)["input_ids"]).to(
+            device
+        )
         # print(f"tokenized ground tokens input ids are of shape {ground_tokens.shape} and value {ground_tokens}")
 
         # set dummy answer the same as ground truth to test this.
-        answer_tokens = torch.tensor(tokenizer(file_content)["input_ids"]).to(device)
+        answer_tokens = torch.tensor(tokenizer(file_content_answer)["input_ids"]).to(
+            device
+        )
         # print(f"tokenized ground tokens input ids are of shape {answer_tokens.shape} and value {answer_tokens}")
 
         ref = get_log_likelihood(model, ground_tokens, answer_tokens, mc_num=128)
