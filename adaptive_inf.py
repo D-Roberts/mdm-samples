@@ -283,6 +283,15 @@ def main(args):
 
     print("----------------- Done -------------------")
 
+    metrics_json = f"metrics_{mode}.json"
+
+    # Open the file in write mode and use json.dump() to save the dictionary
+    with open(metrics_json, "w") as f:
+        json.dump(
+            metrics_dict, f, indent=4
+        )  # indent=4 makes the JSON output human-readable
+    print(f"Metrics saved to {metrics_json}")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
