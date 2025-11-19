@@ -286,6 +286,7 @@ def main(args):
         print("----------------- Done -------------------")
 
         metrics_json = f"metrics_{RUN_ID}.json"
+        all_metrics[steps] = metrics_dict
 
         # Open the file in write mode and use json.dump() to save the dictionary
         with open(metrics_json, "w") as f:
