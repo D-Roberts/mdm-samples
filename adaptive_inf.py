@@ -100,7 +100,10 @@ def eval_humaneval(results, dataset, result_dir):
         results[index] = answer
 
     for index, answer in enumerate(results):
-        print(f"canonical solution is {dataset[index]['canonical_solution']}")
+        print(f"canonical solution is {dataset[index]['canonical_solution']}\n")
+
+        print(f"while the answer was {answer}\n")
+
         code_path = f"{result_dir}/{index + 1}.py"
         with open(code_path, "w", encoding="utf-8") as file:
             file.write(answer + "\n")
