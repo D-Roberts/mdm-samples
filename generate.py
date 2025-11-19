@@ -209,9 +209,9 @@ def pc_sampler_function(
     cross_entropy_scores = torch.clamp(cross_entropy_scores, max=alpha)
 
     # print(f"cross entropy scores in pc sampler fn {cross_entropy_scores} ")
-    print(
-        f"so then perplexity min and max {min(torch.exp(cross_entropy_scores)[0])} and {max(torch.exp(cross_entropy_scores)[0])}"
-    )
+    # print(
+    #     f"so then perplexity min and max {min(torch.exp(cross_entropy_scores)[0])} and {max(torch.exp(cross_entropy_scores)[0])}"
+    # )
 
     positions = torch.arange(sequence_len, device=device, dtype=torch.float32)
     positional_bias = torch.exp(-lambda_val * positions)
