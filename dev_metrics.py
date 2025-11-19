@@ -169,7 +169,7 @@ def main():
         try:
             with open(file_path_answer, "r") as file:
                 file_content_answer = file.read()
-            print("File content as a string:")
+            # print("File content as a string:")
             print(file_content_answer)
         except FileNotFoundError:
             print(f"Error: The file '{file_path_answer}' was not found.")
