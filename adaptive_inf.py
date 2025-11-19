@@ -233,6 +233,17 @@ def main(args):
 
     results = []
     entropies = []
+    metrics_dict = {
+        "steps": steps,
+        "block_length": block_length,
+        "gen_length": gen_length,
+        "method": mode,
+        "lambd": lambd,
+        "alpha": alpha,
+        "gamma": gamma,
+        "thread": thread,
+        "method_metrics": {},
+    }
 
     for input in tqdm(dataset):
         answer, entropy = generate(
@@ -258,9 +269,11 @@ def main(args):
     evaluate(task, results, dataset, result_path, args)
     entp = np.array(entropies)
 
-    print(
-        f"entropies were {entropies} in number {len(entropies)} with average {np.mean(entp)} and sample std dev {np.std(entp, ddof=1)}"
-    )
+    metrics_dict["method_metrics"]["entropy"] = {
+        "point_est": np.mean(entp),
+        "sample_std": np.std(entp, ddof=1),
+    }
+    print(f"metrics dict {metrics_dict}")
 
     print("----------------- Done -------------------")
 
