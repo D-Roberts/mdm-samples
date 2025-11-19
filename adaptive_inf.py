@@ -256,7 +256,11 @@ def main(args):
         entropies.append(entropy)
 
     evaluate(task, results, dataset, result_path, args)
-    print(f"entropies were {entropies} in number {len(entropies)}")
+    entp = np.array(entropies)
+
+    print(
+        f"entropies were {entropies} in number {len(entropies)} with average {np.mean(entp)} and sample std dev {np.std(entp, ddof=1)}"
+    )
 
     print("----------------- Done -------------------")
 
