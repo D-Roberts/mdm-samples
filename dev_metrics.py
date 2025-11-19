@@ -108,13 +108,13 @@ def get_log_likelihood(
         )
         perplex = torch.exp(loss)
 
-        print(f"logits[mask_index] values {logits[mask_index][0]}")
-        print(f"seq[mask_index] values {seq[mask_index][0]}")
-        print(f"p_mask[mask_index] shape {p_mask[mask_index]}")
+        # print(f"logits[mask_index] values {logits[mask_index][0]}")
+        # print(f"seq[mask_index] values {seq[mask_index][0]}")
+        # print(f"p_mask[mask_index] shape {p_mask[mask_index]}")
 
-        print(
-            f"perplex as exp avg loss per seq {perplex.shape} {perplex[0].item(): .4f}"
-        )
+        # print(
+        #     f"perplex as exp avg loss per seq {perplex.shape} {perplex[0].item(): .4f}"
+        # )
 
         loss = loss.sum() / batch_size
 
@@ -122,20 +122,6 @@ def get_log_likelihood(
         ret = -sum(loss_) / len(loss_)
 
     return ret
-
-
-# file_path = "/Users/dr/research/mdm-samples/results/humaneval_results/ground_truth/1.py"
-file_path = "/home/ubuntu/mdm-samples/results/humaneval_results/ground_truth/1.py"
-
-try:
-    with open(file_path, "r") as file:
-        file_content = file.read()
-    # print("File content as a string:")
-    # print(file_content)
-except FileNotFoundError:
-    print(f"Error: The file '{file_path}' was not found.")
-except Exception as e:
-    print(f"An error occurred: {e}")
 
 
 def main():
@@ -159,18 +145,34 @@ def main():
     # prompt = "Roof shingle removal: A man is sitting on a roof. He"
     # answer = " is using wrap to wrap a pair of skis."
 
-    ground_tokens = torch.tensor(tokenizer(file_content)["input_ids"]).to(device)
-    # print(f"tokenized ground tokens input ids are of shape {ground_tokens.shape} and value {ground_tokens}")
+    for i in range(2, 21):
+        # file_path = "/Users/dr/research/mdm-samples/results/humaneval_results/ground_truth/1.py"
+        file_path = (
+            f"/home/ubuntu/mdm-samples/results/humaneval_results/ground_truth/{i}.py"
+        )
 
-    # set dummy answer the same as ground truth to test this.
-    answer_tokens = torch.tensor(tokenizer(file_content)["input_ids"]).to(device)
-    # print(f"tokenized ground tokens input ids are of shape {answer_tokens.shape} and value {answer_tokens}")
+        try:
+            with open(file_path, "r") as file:
+                file_content = file.read()
+            # print("File content as a string:")
+            # print(file_content)
+        except FileNotFoundError:
+            print(f"Error: The file '{file_path}' was not found.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
-    ref = get_log_likelihood(model, ground_tokens, answer_tokens, mc_num=128)
-    print(f"the ref log likelihood ******** {ref}")
-    current = get_log_likelihood(model, ground_tokens, answer_tokens, mc_num=64)
-    ratio = current - ref
-    print(f"Log likelihood ratio is: {ratio}")
+        ground_tokens = torch.tensor(tokenizer(file_content)["input_ids"]).to(device)
+        # print(f"tokenized ground tokens input ids are of shape {ground_tokens.shape} and value {ground_tokens}")
+
+        # set dummy answer the same as ground truth to test this.
+        answer_tokens = torch.tensor(tokenizer(file_content)["input_ids"]).to(device)
+        # print(f"tokenized ground tokens input ids are of shape {answer_tokens.shape} and value {answer_tokens}")
+
+        ref = get_log_likelihood(model, ground_tokens, answer_tokens, mc_num=128)
+        print(f"the ref log likelihood ******** {ref}")
+        current = get_log_likelihood(model, ground_tokens, answer_tokens, mc_num=64)
+        ratio = current - ref
+        print(f"Log likelihood ratio is: {ratio}")
 
 
 if __name__ == "__main__":
