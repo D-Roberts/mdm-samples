@@ -172,7 +172,7 @@ def generate_with_margin(
             entropy = entropy_function(p[:, prompt.shape[1] :])
             # sum over the sequence
             print(
-                f" for step {i} entropy shape is ******************** {entropy.loss()}"
+                f" for step {i} entropy for the sequence is ******************** {entropy.sum()}"
             )
 
             confidence = torch.where(mask_index[:, prompt.shape[1] :], x0_p, -np.inf)
