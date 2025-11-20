@@ -559,6 +559,7 @@ def generate_with_fast_dllm(
                 == mask_id
             ).sum() == 0:
                 break
-        p = F.softmax(logits, dim=-1)
-        entropy = -entropy_function(p[:, prompt.shape[1] :]).sum() / gen_length
+    p = F.softmax(logits, dim=-1)
+    entropy = -entropy_function(p[:, prompt.shape[1] :]).sum() / gen_length
+    print(f"entropy in fast dllm {entropy}")
     return x, nfe, entropy.detach().cpu().item()
