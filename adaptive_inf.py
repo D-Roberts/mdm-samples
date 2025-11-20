@@ -347,10 +347,10 @@ def main(args):
                 all_metrics[run_id] = metrics_dict
 
     # Open the file in write mode and use json.dump() to save the dictionary
-    metrics_json = f"metrics.json"
+    metrics_json = f"all_metrics.json"
     with open(metrics_json, "w") as f:
         json.dump(
-            metrics_dict, f, indent=4
+            all_metrics, f, indent=4
         )  # indent=4 makes the JSON output human-readable
     print(f"Metrics saved to {metrics_json}")
 
