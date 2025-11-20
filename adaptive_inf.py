@@ -13,12 +13,6 @@ from pathlib import Path
 
 from transformers import AutoTokenizer, AutoModel
 
-RUN_ID = 1
-# current_script_path = os.path.abspath(__file__)
-# scripts_dir = os.path.dirname(current_script_path)
-# project_root = os.path.dirname(scripts_dir)
-# if project_root not in sys.path:
-#     sys.path.insert(0, project_root)
 
 os.environ["TOKENIZERS_PARALLELISM"] = "1"
 np.random.seed(0)
@@ -150,7 +144,7 @@ def generate(
     lambd,
     alpha,
     corpus_name,
-    thread,
+    threashold,
     gamma,
     num_remask_tokens=10,
 ):
@@ -175,7 +169,7 @@ def generate(
             steps,
             gen_length,
             block_length,
-            temperature,
+            temperature=0.0,
             cfg_scale=0.0,
             remasking="low_confidence",
         )
@@ -213,7 +207,7 @@ def generate(
             block_length,
             temperature,
             remasking="low_confidence",
-            threshold=thread,
+            threshold=threashold,
         )
 
     answer = tokenizer.batch_decode(
@@ -234,7 +228,7 @@ def main(args):
     lambd = args.lambd
     alpha = args.alpha
     corpus_name = args.corpus_name
-    thread = args.thread
+    threashold = args.threashold
     gamma = args.gamma
     num_remask_tokens = args.num_remask_tokens
     data_path = args.data_path
@@ -268,7 +262,7 @@ def main(args):
                         "lambd": lambd,
                         "alpha": alpha,
                         "gamma": gamma,
-                        "thread": thread,
+                        "threashold": threashold,
                         "method_metrics": {},
                     }
                     start_time = time.perf_counter()
@@ -287,7 +281,7 @@ def main(args):
                             lambd,
                             alpha,
                             corpus_name,
-                            thread,
+                            threashold,
                             gamma,
                             num_remask_tokens,
                         )
@@ -375,7 +369,7 @@ if __name__ == "__main__":
         type=str,
         default="data/corpus/reference_corpus_llada.json",
     )
-    parser.add_argument("--thread", type=float, default=0.9)
+    parser.add_argument("--threashold", type=float, default=0.9)
     parser.add_argument("--gamma", type=float, default=0.01)
     parser.add_argument("--num_remask_tokens", type=int, default=10)
     parser.add_argument("--data_path", type=str, default="data/humaneval20.jsonl")
