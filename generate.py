@@ -195,9 +195,9 @@ def generate_with_margin(
                 #     f"logits shape {logits.shape} and masked logits shape {logits[mask_index].shape}"
                 # ) # batch 1, seqlen, vocab
 
-                nll = nll_function(
-                    p[:, prompt.shape[1] :][mask_index[:, prompt.shape[1] :]]
-                )
+                prob_subset = p[:, prompt.shape[1] :]
+                mask_subset = mask_index[:, prompt.shape[1] :]
+                nll = nll_function(prob_subset[mask_subset])
                 print(f"nll {nll}")
 
             confidence = torch.where(mask_index[:, prompt.shape[1] :], x0_p, -np.inf)
