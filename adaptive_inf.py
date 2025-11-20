@@ -254,8 +254,8 @@ def main(args):
     all_metrics = dict()
 
     for mode in ["eb_sampler", "fast_dllm", "pc_sampler"]:  # margin
-        for steps in [16]:  # [16, 32]:
-            for gen_length in [64, 128]:
+        for steps in [4]:  # [16, 32]:
+            for gen_length in [64]:  # [64, 128]:
                 for block_length in [32]:  # [32, 64]:
                     run_id = f"steps{steps}_genlen{gen_length}_blockl{block_length}"
                     results = []
