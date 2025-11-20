@@ -532,6 +532,10 @@ def generate_with_fast_dllm(
             nfe += 1
             mask_index = x == mask_id
             logits = model(x).logits
+
+            p = F.softmax(logits, dim=-1)
+            entropy = -entropy_function(p[:, prompt.shape[1] :]).sum() / gen_length
+            print(f"entropy in fast dllm {entropy}")
             mask_index[:, prompt.shape[1] + (num_block + 1) * block_length :] = 0
             if factor is None:
                 x0, transfer_index = get_transfer_index(
@@ -559,7 +563,5 @@ def generate_with_fast_dllm(
                 == mask_id
             ).sum() == 0:
                 break
-    p = F.softmax(logits, dim=-1)
-    entropy = -entropy_function(p[:, prompt.shape[1] :]).sum() / gen_length
-    print(f"entropy in fast dllm {entropy}")
-    return x, nfe, entropy.detach().cpu().item()
+
+    return x, entropy.detach().cpu().item()
