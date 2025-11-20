@@ -24,8 +24,10 @@ def nll_function(probabilities):
             "Input tensor 'probabilities' must be a 3D tensor with shape [batch_size, sequence_len, vocab_size]"
         )
     epsilon = 1e-12
-    probs_safe = probabilities.clone() + epsilon
-    print(f"what is prob safe {probs_safe.shape[1]}")
+    sorted_probs, _ = torch.sort(probabilities, dim=-1, descending=True)
+    top1_probs = sorted_probs[:, :, 0]
+    probs_safe = top1_probs.clone() + epsilon
+    print(f"what is prob safe {top1_probs.shape[1]}")
     ll = torch.sum(torch.log(probs_safe), dim=-1) / probs_safe.shape[1]
     return -ll
 
@@ -193,7 +195,9 @@ def generate_with_margin(
                 #     f"logits shape {logits.shape} and masked logits shape {logits[mask_index].shape}"
                 # ) # batch 1, seqlen, vocab
 
-                nll = nll_function(p[mask_index[:, prompt.shape[1] :]])
+                nll = nll_function(
+                    p[:, prompt.shape[1] :][mask_index[:, prompt.shape[1] :]]
+                )
                 print(f"nll {nll}")
 
             confidence = torch.where(mask_index[:, prompt.shape[1] :], x0_p, -np.inf)
