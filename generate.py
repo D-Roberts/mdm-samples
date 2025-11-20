@@ -563,5 +563,5 @@ def generate_with_fast_dllm(
                 == mask_id
             ).sum() == 0:
                 break
-
+    print(f"why not enough val to unpack {x} and {entropy.detach().cpu().item()}")
     return x, entropy.detach().cpu().item()
