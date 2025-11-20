@@ -22,10 +22,10 @@ def nll_function(probabilities):
     print(f"prob input shape in nll {probabilities.shape}")
     epsilon = 1e-12
     sorted_probs, _ = torch.sort(probabilities, dim=-1, descending=True)
-    top1_probs = sorted_probs[:, 0]
+    top1_probs = sorted_probs[:, 0]  # over the vocab
     probs_safe = top1_probs.clone() + epsilon
-    print(f"what is prob safe {top1_probs.shape[1]}")
-    ll = torch.sum(torch.log(probs_safe), dim=-1) / probs_safe.shape[1]
+    print(f"what is prob safe {top1_probs.shape[0]}")
+    ll = torch.sum(torch.log(probs_safe), dim=-1) / probs_safe.shape[0]
     return -ll
 
 
