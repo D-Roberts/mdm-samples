@@ -148,6 +148,7 @@ def run_python_file(file_path):
 def generate(
     model,
     tokenizer,
+    file_content_ground,
     input,
     task,
     steps,
@@ -171,6 +172,10 @@ def generate(
     )
     prompt = tokenizer(user_input)["input_ids"]
     prompt = torch.tensor(prompt).to(model.device).unsqueeze(0)
+
+    gt = tokenizer(file_content_ground)["input_ids"]
+    gt = torch.tensor(gt).to(model.device).unsqueeze(0)
+    print(f"ground truth tokenized values {gt} and shape {gt.shape}")
 
     # the baseline and compared methods
 
@@ -287,9 +292,11 @@ def main(args):
                         file_path_ground = f"/home/ubuntu/mdm-samples/results/humaneval_results/ground_truth/{eg}.py"
                         file_content_ground = get_groundt_string(eg, file_path_ground)
                         print(file_content_ground)
+
                         answer, entropy = generate(
                             model,
                             tokenizer,
+                            file_content_ground,
                             input,
                             task,
                             steps,
