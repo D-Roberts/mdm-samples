@@ -181,14 +181,11 @@ def generate_with_margin(
                 #     f"logits shape {logits.shape} and masked logits shape {logits[mask_index].shape}"
                 # ) # batch 1, seqlen, vocab
 
-                nll = (
-                    -F.cross_entropy(
-                        logits[mask_index],
-                        logits[mask_index],
-                        reduction="none",
-                    ).sum()
-                    / block_length
-                )
+                nll = -F.cross_entropy(
+                    logits[mask_index],
+                    logits[mask_index],
+                    reduction="none",
+                ).sum()
                 print(f"nll {nll}")
 
             confidence = torch.where(mask_index[:, prompt.shape[1] :], x0_p, -np.inf)
