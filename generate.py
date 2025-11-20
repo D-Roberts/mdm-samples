@@ -25,7 +25,8 @@ def nll_function(probabilities):
         )
     epsilon = 1e-12
     probs_safe = probabilities.clone() + epsilon
-    ll = torch.sum(torch.log(probs_safe), dim=-1)
+    print(f"what is prob safe {probs_safe.shape[1]}")
+    ll = torch.sum(torch.log(probs_safe), dim=-1) / probs_safe.shape[1]
     return -ll
 
 
@@ -192,7 +193,7 @@ def generate_with_margin(
                 #     f"logits shape {logits.shape} and masked logits shape {logits[mask_index].shape}"
                 # ) # batch 1, seqlen, vocab
 
-                nll = nll_function(p[:, prompt.shape[1] :]).sum() / block_length
+                nll = nll_function(p[mask_index[:, prompt.shape[1] :]])
                 print(f"nll {nll}")
 
             confidence = torch.where(mask_index[:, prompt.shape[1] :], x0_p, -np.inf)
