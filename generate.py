@@ -195,9 +195,7 @@ def generate_with_margin(
                 prob_subset = p[:, prompt.shape[1] :]
                 mask_subset = mask_index[:, prompt.shape[1] :]
                 nll = nll_function(prob_subset[mask_subset])
-
                 perplex = torch.exp(nll)
-                print(f"perplex {perplex}")
 
             confidence = torch.where(mask_index[:, prompt.shape[1] :], x0_p, -np.inf)
 
@@ -342,10 +340,14 @@ def generate_with_pc_sampler(
                 bg_freq_tensor=CORPUS,
             )
 
-            if i == steps - 1:
+            if (num_block == num_blocks - 1) and (i == steps - 1):
                 entropy = (
                     -entropy_function(p[:, prompt.shape[1] :]).sum() / block_length
                 )
+                prob_subset = p[:, prompt.shape[1] :]
+                mask_subset = mask_index[:, prompt.shape[1] :]
+                nll = nll_function(prob_subset[mask_subset])
+                perplex = torch.exp(nll)
 
             confidence = torch.where(
                 mask_index[
@@ -370,7 +372,12 @@ def generate_with_pc_sampler(
             x[transfer_index] = x0[transfer_index]
     if return_order:
         return x, orders
-    return x, entropy.detach().cpu().item()
+    return (
+        x,
+        entropy.detach().cpu().item(),
+        nll.detach().cpu().item(),
+        perplex.detach().cpu().item(),
+    )
 
 
 @torch.no_grad()
@@ -410,6 +417,11 @@ def generate_with_eb_sampler(
         p = F.softmax(logits, dim=-1)
         entropy = -entropy_function(p[:, prompt.shape[1] :]).sum() / gen_length
 
+        prob_subset = p[:, prompt.shape[1] :]
+        mask_subset = mask_index[:, prompt.shape[1] :]
+        nll = nll_function(prob_subset[mask_subset])
+        perplex = torch.exp(nll)
+
         err_proxy = torch.distributions.Categorical(logits=masked_logits).entropy()
 
         masked_token_indices = mask_index.nonzero(as_tuple=True)[1]
@@ -430,7 +442,12 @@ def generate_with_eb_sampler(
 
         x[0, indices_to_unmask] = predicted_tokens[0, indices_to_unmask]
 
-    return x, entropy.detach().cpu().item()
+    return (
+        x,
+        entropy.detach().cpu().item(),
+        nll.detach().cpu().item(),
+        perplex.detach().cpu().item(),
+    )
 
 
 # for fast dllm
@@ -570,6 +587,12 @@ def generate_with_fast_dllm(
             p = F.softmax(logits, dim=-1)
             entropy = -entropy_function(p[:, prompt.shape[1] :]).sum() / block_length
             # print(f"entropy in fast dllm {entropy}")
+
+            prob_subset = p[:, prompt.shape[1] :]
+            mask_subset = mask_index[:, prompt.shape[1] :]
+            nll = nll_function(prob_subset[mask_subset])
+            perplex = torch.exp(nll)
+
             mask_index[:, prompt.shape[1] + (num_block + 1) * block_length :] = 0
             if factor is None:
                 x0, transfer_index = get_transfer_index(
@@ -598,4 +621,9 @@ def generate_with_fast_dllm(
             ).sum() == 0:
                 break
     # print(f"why not enough val to unpack {x} and {entropy.detach().cpu().item()}")
-    return x, entropy.detach().cpu().item()
+    return (
+        x,
+        entropy.detach().cpu().item(),
+        nll.detach().cpu().item(),
+        perplex.detach().cpu().item(),
+    )
