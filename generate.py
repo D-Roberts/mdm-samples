@@ -211,7 +211,12 @@ def generate_with_margin(
                     orders[num_block + 1].append(select_index.tolist())
             x[transfer_index] = x0[transfer_index]
 
-    return x, entropy.detach().cpu().item()
+    return (
+        x,
+        entropy.detach().cpu().item(),
+        nll.detach().cpu().item(),
+        perplex.detach().cpu().item(),
+    )
 
 
 def pc_sampler_function(

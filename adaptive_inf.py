@@ -13,7 +13,6 @@ from pathlib import Path
 
 from transformers import AutoTokenizer, AutoModel
 
-
 os.environ["TOKENIZERS_PARALLELISM"] = "1"
 np.random.seed(0)
 torch.manual_seed(0)
@@ -21,20 +20,6 @@ random.seed(0)
 torch.cuda.manual_seed(0)
 torch.cuda.manual_seed_all(0)
 torch.backends.cudnn.deterministic = True
-
-
-def get_groundt_string(i, file_path_ground):
-    print(f"for case {i} *** ")
-    try:
-        with open(file_path_ground, "r") as file:
-            file_content_ground = file.read()
-
-    except FileNotFoundError:
-        print(f"Error: The file '{file_path_ground}' was not found.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-    return file_content_ground
 
 
 def load_dataset(data_path, task):
@@ -148,7 +133,6 @@ def run_python_file(file_path):
 def generate(
     model,
     tokenizer,
-    file_content_ground,
     input,
     task,
     steps,
@@ -173,11 +157,7 @@ def generate(
     prompt = tokenizer(user_input)["input_ids"]
     prompt = torch.tensor(prompt).to(model.device).unsqueeze(0)
 
-    print(f"so what was my prompt and what was my query as userinput {user_input}")
-
-    gt = tokenizer(file_content_ground)["input_ids"]
-    gt = torch.tensor(gt).to(model.device).unsqueeze(0)
-    print(f"ground truth tokenized values {gt} and shape {gt.shape}")
+    # print(f"so what was my prompt and what was my query as userinput {user_input}")
 
     # the baseline and compared methods
 
@@ -275,6 +255,9 @@ def main(args):
                     run_id = f"method_{mode}_steps{steps}_genlen{gen_length}_blockl{block_length}"
                     results = []
                     entropies = []
+                    nlls = []
+                    perplexes = []
+
                     metrics_dict = {
                         "steps": steps,
                         "block_length": block_length,
@@ -288,19 +271,10 @@ def main(args):
                     }
                     start_time = time.perf_counter()
 
-                    eg = 0
                     for input in tqdm(dataset):
-                        eg += 1
-                        print(f"I am at iteration {eg}")
-
-                        file_path_ground = f"/home/ubuntu/mdm-samples/results/humaneval_results/ground_truth/{eg}.py"
-                        file_content_ground = get_groundt_string(eg, file_path_ground)
-                        # print(file_content_ground)
-
-                        answer, entropy = generate(
+                        answer, entropy, nll, perplex = generate(
                             model,
                             tokenizer,
-                            file_content_ground,
                             input,
                             task,
                             steps,
@@ -317,6 +291,8 @@ def main(args):
                         )
                         results.append(answer)
                         entropies.append(entropy)
+                        nlls.append(nll)
+                        perplexes.append(perplex)
 
                     end_time = time.perf_counter()
                     time_margin = end_time - start_time
@@ -324,12 +300,26 @@ def main(args):
 
                     result_path = f"results/humaneval_{mode}"
                     evaluate(task, results, dataset, result_path, args)
+
                     entp = np.array(entropies)
+                    nllnp = np.array(nlls)
+                    perplexnp = np.array(perplexes)
 
                     metrics_dict["method_metrics"]["entropy"] = {
                         "point_est": np.mean(entp),
                         "sample_std": np.std(entp, ddof=1),
                     }
+
+                    metrics_dict["method_metrics"]["nll"] = {
+                        "point_est": np.mean(nllnp),
+                        "sample_std": np.std(nllnp, ddof=1),
+                    }
+
+                    metrics_dict["method_metrics"]["perplex"] = {
+                        "point_est": np.mean(perplexnp),
+                        "sample_std": np.std(perplexnp, ddof=1),
+                    }
+
                     metrics_dict["method_metrics"]["seconds_per_20eg"] = time_margin
                     print(f"metrics dict {metrics_dict}")
 
