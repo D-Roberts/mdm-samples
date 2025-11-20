@@ -171,7 +171,7 @@ def generate_with_margin(
             x0_p = margin_function(p[:, prompt.shape[1] :])
 
             # metrics last step only
-            if i == steps - 1:
+            if (num_block == num_blocks - 1) and (i == steps - 1):
                 entropy = (
                     -entropy_function(p[:, prompt.shape[1] :]).sum() / block_length
                 )
