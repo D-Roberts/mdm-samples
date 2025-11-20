@@ -3,10 +3,13 @@ import os
 import json
 import time
 import sys
+import subprocess
+import concurrent.futures
 import argparse
 import numpy as np
 import torch
 from tqdm import tqdm
+from pathlib import Path
 
 from transformers import AutoTokenizer, AutoModel
 
@@ -116,6 +119,24 @@ def evaluate(task, results, dataset, result_path, args):
     eval_humaneval(results, dataset, result_path)
 
 
+def run_python_file(file_path):
+    try:
+        compile(open(file_path, "rb").read(), file_path, "exec")
+        result = subprocess.run(
+            [sys.executable, file_path], capture_output=True, text=True, timeout=10
+        )
+        if result.stderr:
+            return file_path, "RuntimeError", result.stderr.strip()
+        else:
+            return file_path, "Success", result.stdout.strip()
+    except SyntaxError as e:
+        return file_path, "SyntaxError", str(e)
+    except subprocess.TimeoutExpired:
+        return file_path, "Timeout", "Execution timed out"
+    except Exception as e:
+        return file_path, "Error", str(e)
+
+
 def generate(
     model,
     tokenizer,
@@ -217,7 +238,7 @@ def main(args):
     gamma = args.gamma
     num_remask_tokens = args.num_remask_tokens
     data_path = args.data_path
-    result_path = args.result_path
+    # result_path = args.result_path
 
     dataset = load_dataset(data_path, task)
 
@@ -276,6 +297,7 @@ def main(args):
                 time_margin = end_time - start_time
                 print(f"Execution time for the 20: {time_margin:.6f} seconds")
 
+                result_path = f"results/humaneval_{mode}"
                 evaluate(task, results, dataset, result_path, args)
                 entp = np.array(entropies)
 
@@ -288,15 +310,49 @@ def main(args):
 
                 print("----------------- Done -------------------")
 
-                metrics_json = f"metrics_{RUN_ID}.json"
+                # Getting accuracy by executing code and checking results on tests
+
+                py_files = [str(p) for p in Path(result_path).rglob("*.py")]
+                total_files = len(py_files)
+
+                if not py_files:
+                    print("No Python files found!")
+                    return
+
+                print(f"Found {total_files} Python files, starting execution...")
+
+                success_count = 0
+                results = []
+
+                with concurrent.futures.ThreadPoolExecutor(
+                    max_workers=os.cpu_count() * 2
+                ) as executor:
+                    future_to_file = {
+                        executor.submit(run_python_file, f): f for f in py_files
+                    }
+
+                    for future in concurrent.futures.as_completed(future_to_file):
+                        file_path, status, message = future.result()
+                        results.append((file_path, status, message))
+
+                        if status == "Success":
+                            success_count += 1
+
+                        print(f"{file_path}: {status}")
+
+                accuracy = (success_count / total_files) * 100 if total_files > 0 else 0
+
+                metrics_dict["method_metrics"]["accuracy"] = accuracy
+
                 all_metrics[run_id] = metrics_dict
 
-            # Open the file in write mode and use json.dump() to save the dictionary
-            with open(metrics_json, "w") as f:
-                json.dump(
-                    metrics_dict, f, indent=4
-                )  # indent=4 makes the JSON output human-readable
-            print(f"Metrics saved to {metrics_json}")
+    # Open the file in write mode and use json.dump() to save the dictionary
+    metrics_json = f"metrics.json"
+    with open(metrics_json, "w") as f:
+        json.dump(
+            metrics_dict, f, indent=4
+        )  # indent=4 makes the JSON output human-readable
+    print(f"Metrics saved to {metrics_json}")
 
 
 if __name__ == "__main__":
@@ -322,4 +378,5 @@ if __name__ == "__main__":
     parser.add_argument("--data_path", type=str, default="data/humaneval20.jsonl")
     parser.add_argument("--result_path", type=str, default="results/humaneval_margin")
     args = parser.parse_args()
+
     main(args)
