@@ -178,7 +178,7 @@ def generate(
     elif mode == "pc_sampler":
         from generate import generate_with_pc_sampler
 
-        out, entropy = generate_with_pc_sampler(
+        out, entropy, nll, perplex = generate_with_pc_sampler(
             model,
             prompt,
             steps,
@@ -194,13 +194,13 @@ def generate(
     elif mode == "eb_sampler":
         from generate import generate_with_eb_sampler
 
-        out, entropy = generate_with_eb_sampler(
+        out, entropy, nll, perplex = generate_with_eb_sampler(
             model, prompt, gamma, gen_length, temperature, cfg_scale=0.0
         )
     elif mode == "fast_dllm":
         from generate import generate_with_fast_dllm
 
-        out, entropy = generate_with_fast_dllm(
+        out, entropy, nll, perplex = generate_with_fast_dllm(
             model,
             prompt,
             steps,
