@@ -19,12 +19,12 @@ def entropy_function(probabilities):
 
 
 def nll_function(probabilities):
-    print(f"prob input shape in nll {probabilities.shape}")
+    # print(f"prob input shape in nll {probabilities.shape}")
     epsilon = 1e-12
     sorted_probs, _ = torch.sort(probabilities, dim=-1, descending=True)
     top1_probs = sorted_probs[:, 0]  # over the vocab
     probs_safe = top1_probs.clone() + epsilon
-    print(f"what is prob safe {top1_probs.shape[0]}")
+    # print(f"what is prob safe {top1_probs.shape[0]}")
     ll = torch.sum(torch.log(probs_safe), dim=-1) / probs_safe.shape[0]
     return -ll
 
@@ -195,7 +195,9 @@ def generate_with_margin(
                 prob_subset = p[:, prompt.shape[1] :]
                 mask_subset = mask_index[:, prompt.shape[1] :]
                 nll = nll_function(prob_subset[mask_subset])
-                print(f"nll {nll}")
+
+                perplex = torch.exp(nll)
+                print(f"perplex {perplex}")
 
             confidence = torch.where(mask_index[:, prompt.shape[1] :], x0_p, -np.inf)
 
