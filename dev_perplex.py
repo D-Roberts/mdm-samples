@@ -4,13 +4,14 @@ import torch.nn.functional as F
 
 # Let's say your model outputs logits for a vocabulary of 10 words.
 vocab_size = 10
-batch_size = 5
+batch_size = 1
 sequence_length = 128
 
 # Simulate model output (logits) for a sequence
 # The model predicts the next token's logit distribution for each position in the sequence.
 # Shape: (batch_size, sequence_length, vocab_size)
 model_logits = torch.randn(batch_size, sequence_length, vocab_size)
+print(f"model logits[0] shape {model_logits[0].shape}")
 
 # Simulate target sequence (ground truth token IDs)
 # Shape: (batch_size, sequence_length)
@@ -22,8 +23,12 @@ target_tokens = torch.randint(0, vocab_size, (batch_size, sequence_length))
 loss = F.cross_entropy(model_logits.view(-1, vocab_size), target_tokens.view(-1))
 
 print(
-    "model_logits.view(-1, vocab_size) shape", model_logits.view(-1, vocab_size).shape
+    "model_logits.view(-1, vocab_size) shape",
+    model_logits.view(-1, vocab_size)[:, 0].shape,
 )
+
+print(f"target view {target_tokens.view(-1).shape}")
+
 # Calculate Perplexity
 perplexity = torch.exp(loss)
 

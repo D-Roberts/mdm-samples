@@ -23,6 +23,20 @@ torch.cuda.manual_seed_all(0)
 torch.backends.cudnn.deterministic = True
 
 
+def get_groundt_string(i, file_path_ground):
+    print(f"for case {i} *** ")
+    try:
+        with open(file_path_ground, "r") as file:
+            file_content_ground = file.read()
+
+    except FileNotFoundError:
+        print(f"Error: The file '{file_path_ground}' was not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    return file_content_ground
+
+
 def load_dataset(data_path, task):
     data_json = load_json_or_jsonl(data_path)
     dataset = []
@@ -267,7 +281,12 @@ def main(args):
                     }
                     start_time = time.perf_counter()
 
+                    eg = 0
                     for input in tqdm(dataset):
+                        eg += 1
+                        file_path_ground = f"/home/ubuntu/mdm-samples/results/humaneval_results/ground_truth/{eg}.py"
+                        file_content_ground = get_groundt_string(eg, file_path_ground)
+                        print(file_content_ground)
                         answer, entropy = generate(
                             model,
                             tokenizer,
