@@ -180,7 +180,7 @@ def generate_with_margin(
 
                 block_cross_entropy_scores = F.cross_entropy(
                     logits[mask_index], logits[mask_index], reduction="none"
-                ).sum()
+                )
                 print(f"block cross entr {block_cross_entropy_scores}")
 
             confidence = torch.where(mask_index[:, prompt.shape[1] :], x0_p, -np.inf)

@@ -123,15 +123,17 @@ def get_log_likelihood(
             f"logits[mask_index] shape {seq[mask_index].shape}"
         )  # torch.Size([12]) and logits of shape [12, vocabsize]
 
-        print(
-            f"what would this be {F.cross_entropy(logits[mask_index], seq[mask_index], reduction='none')}"
-        )
         loss = (
             F.cross_entropy(logits[mask_index], seq[mask_index], reduction="none")
             / p_mask[mask_index]
         )
         print(
             f"and p_mask[mask_index] {p_mask[mask_index]} and shape {p_mask[mask_index].shape}"
+        )
+
+        print(f"loss is {loss}")
+        print(
+            f"loss before div by pmask {F.cross_entropy(logits[mask_index], seq[mask_index], reduction='none')}"
         )
 
         perplex = torch.exp(loss)
@@ -148,7 +150,7 @@ def get_log_likelihood(
 
         loss_.append(loss.item())
         ret = -sum(loss_) / len(loss_)  # this is -NLL averaged over batch
-
+        print(f"what was nll {ret}")
     return ret
 
 
