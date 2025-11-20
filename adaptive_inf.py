@@ -164,7 +164,7 @@ def generate(
     if mode == "margin":
         from generate import generate_with_margin
 
-        out, entropy = generate_with_margin(
+        out, entropy, nll, perplex = generate_with_margin(
             model,
             prompt,
             steps,
@@ -214,7 +214,7 @@ def generate(
     answer = tokenizer.batch_decode(
         out[:, prompt.shape[1] :], skip_special_tokens=True
     )[0]
-    return answer, entropy
+    return answer, entropy, nll, perplex
 
 
 def main(args):
