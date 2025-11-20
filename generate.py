@@ -18,7 +18,7 @@ def entropy_function(probabilities):
     return entropy
 
 
-def nll(probabilities):
+def nll_function(probabilities):
     if probabilities.dim() != 3:
         raise ValueError(
             "Input tensor 'probabilities' must be a 3D tensor with shape [batch_size, sequence_len, vocab_size]"
@@ -192,7 +192,7 @@ def generate_with_margin(
                 #     f"logits shape {logits.shape} and masked logits shape {logits[mask_index].shape}"
                 # ) # batch 1, seqlen, vocab
 
-                nll = nll(p[:, prompt.shape[1] :]).sum() / block_length
+                nll = nll_function(p[:, prompt.shape[1] :]).sum() / block_length
                 print(f"nll {nll}")
 
             confidence = torch.where(mask_index[:, prompt.shape[1] :], x0_p, -np.inf)
