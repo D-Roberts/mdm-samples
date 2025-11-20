@@ -18,6 +18,17 @@ def entropy_function(probabilities):
     return entropy
 
 
+def nll(probabilities):
+    if probabilities.dim() != 3:
+        raise ValueError(
+            "Input tensor 'probabilities' must be a 3D tensor with shape [batch_size, sequence_len, vocab_size]"
+        )
+    epsilon = 1e-12
+    probs_safe = probabilities.clone() + epsilon
+    ll = torch.sum(torch.log(probs_safe), dim=-1)
+    return -ll
+
+
 def add_gumbel_noise(logits, temperature):
     """
     The Gumbel max is a method for sampling categorical distributions.
@@ -181,11 +192,7 @@ def generate_with_margin(
                 #     f"logits shape {logits.shape} and masked logits shape {logits[mask_index].shape}"
                 # ) # batch 1, seqlen, vocab
 
-                nll = -F.cross_entropy(
-                    logits[mask_index],
-                    logits[mask_index],
-                    reduction="none",
-                ).sum()
+                nll = nll(p[:, prompt.shape[1] :]).sum() / block_length
                 print(f"nll {nll}")
 
             confidence = torch.where(mask_index[:, prompt.shape[1] :], x0_p, -np.inf)
