@@ -170,7 +170,9 @@ def generate_with_margin(
             x0_p = margin_function(p[:, prompt.shape[1] :])
 
             if i == steps - 1:
-                entropy = -entropy_function(p[:, prompt.shape[1] :]).sum() / gen_length
+                entropy = (
+                    -entropy_function(p[:, prompt.shape[1] :]).sum() / block_length
+                )
 
             confidence = torch.where(mask_index[:, prompt.shape[1] :], x0_p, -np.inf)
 
@@ -311,7 +313,9 @@ def generate_with_pc_sampler(
             )
 
             if i == steps - 1:
-                entropy = -entropy_function(p[:, prompt.shape[1] :]).sum() / gen_length
+                entropy = (
+                    -entropy_function(p[:, prompt.shape[1] :]).sum() / block_length
+                )
 
             confidence = torch.where(
                 mask_index[
@@ -534,7 +538,7 @@ def generate_with_fast_dllm(
             logits = model(x).logits
 
             p = F.softmax(logits, dim=-1)
-            entropy = -entropy_function(p[:, prompt.shape[1] :]).sum() / gen_length
+            entropy = -entropy_function(p[:, prompt.shape[1] :]).sum() / block_length
             print(f"entropy in fast dllm {entropy}")
             mask_index[:, prompt.shape[1] + (num_block + 1) * block_length :] = 0
             if factor is None:

@@ -214,7 +214,7 @@ def generate(
             temperature,
             remasking="low_confidence",
             threshold=thread,
-        )[0]
+        )
 
     answer = tokenizer.batch_decode(
         out[:, prompt.shape[1] :], skip_special_tokens=True
