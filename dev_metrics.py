@@ -133,7 +133,7 @@ def get_log_likelihood(
 
         print(f"loss is {loss}")
         print(
-            f"loss before div by pmask {F.cross_entropy(logits[mask_index], seq[mask_index], reduction='none')}"
+            f"loss shape before div by pmask {F.cross_entropy(logits[mask_index], seq[mask_index], reduction='none').shape}"
         )
 
         perplex = torch.exp(loss)

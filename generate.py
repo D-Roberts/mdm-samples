@@ -186,7 +186,7 @@ def generate_with_margin(
                     logits[mask_index][:, prompt.shape[1] :],
                     reduction="none",
                 )
-                print(f"block cross entr {block_cross_entropy_scores}")
+                print(f"block cross entr shape {block_cross_entropy_scores.shape}")
 
             confidence = torch.where(mask_index[:, prompt.shape[1] :], x0_p, -np.inf)
 
