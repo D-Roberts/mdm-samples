@@ -19,13 +19,10 @@ def entropy_function(probabilities):
 
 
 def nll_function(probabilities):
-    if probabilities.dim() != 3:
-        raise ValueError(
-            "Input tensor 'probabilities' must be a 3D tensor with shape [batch_size, sequence_len, vocab_size]"
-        )
+    print(f"prob input shape in nll {probabilities.shape}")
     epsilon = 1e-12
     sorted_probs, _ = torch.sort(probabilities, dim=-1, descending=True)
-    top1_probs = sorted_probs[:, :, 0]
+    top1_probs = sorted_probs[:, 0]
     probs_safe = top1_probs.clone() + epsilon
     print(f"what is prob safe {top1_probs.shape[1]}")
     ll = torch.sum(torch.log(probs_safe), dim=-1) / probs_safe.shape[1]
