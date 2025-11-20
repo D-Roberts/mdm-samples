@@ -154,6 +154,7 @@ def generate_with_margin(
                 logits = model(x).logits
 
             logits_with_noise = add_gumbel_noise(logits, temperature=temperature)
+
             x0 = torch.argmax(logits_with_noise, dim=-1)  # b, l
 
             if remasking == "low_confidence":
@@ -169,10 +170,18 @@ def generate_with_margin(
             x0 = torch.where(mask_index, x0, x)
             x0_p = margin_function(p[:, prompt.shape[1] :])
 
+            # metrics last step only
             if i == steps - 1:
                 entropy = (
                     -entropy_function(p[:, prompt.shape[1] :]).sum() / block_length
                 )
+
+                sequence_len = logits.shape[1]
+
+                block_cross_entropy_scores = F.cross_entropy(
+                    logits[mask_index], logits[mask_index], reduction="none"
+                ).sum()
+                print(f"block cross entr {block_cross_entropy_scores}")
 
             confidence = torch.where(mask_index[:, prompt.shape[1] :], x0_p, -np.inf)
 

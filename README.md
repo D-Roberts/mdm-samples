@@ -14,7 +14,10 @@ pip install -r requirements.txt
 ### Dataset:
 Samples from human eval code infill task are in data/humaneval20.jsonl.
 
-
+### To run ablations and generate the metrics json:
+```
+python adaptive_inf.py
+```
 ### Code references:
 https://github.com/NEUIR/PC-Sampler
 
