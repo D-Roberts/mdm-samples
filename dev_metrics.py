@@ -207,11 +207,15 @@ def main():
     #         print(f"An error occurred: {e}")
 
     ground_tokens = torch.tensor(tokenizer(prompt)["input_ids"]).to(device)
-    #     # print(f"tokenized ground tokens input ids are of shape {ground_tokens.shape} and value {ground_tokens}")
+    print(
+        f"tokenized ground tokens input ids are of shape {ground_tokens.shape} and value {ground_tokens}"
+    )
 
     #     # set dummy answer the same as ground truth to test this.
     answer_tokens = torch.tensor(tokenizer(answer)["input_ids"]).to(device)
-    # print(f"tokenized ground tokens input ids are of shape {answer_tokens.shape} and value {answer_tokens}")
+    print(
+        f"tokenized ground tokens input ids are of shape {answer_tokens.shape} and value {answer_tokens}"
+    )
 
     ref = get_log_likelihood(model, ground_tokens, answer_tokens, mc_num=4)
     # print(f"the ref log likelihood ******** {ref}")

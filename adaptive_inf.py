@@ -173,6 +173,8 @@ def generate(
     prompt = tokenizer(user_input)["input_ids"]
     prompt = torch.tensor(prompt).to(model.device).unsqueeze(0)
 
+    print(f"so what was my prompt and what was my query as userinput {user_input}")
+
     gt = tokenizer(file_content_ground)["input_ids"]
     gt = torch.tensor(gt).to(model.device).unsqueeze(0)
     print(f"ground truth tokenized values {gt} and shape {gt.shape}")
