@@ -257,7 +257,7 @@ def main(args):
         for steps in [4]:  # [16, 32]:
             for gen_length in [64]:  # [64, 128]:
                 for block_length in [32]:  # [32, 64]:
-                    run_id = f"steps{steps}_genlen{gen_length}_blockl{block_length}"
+                    run_id = f"method_{mode}_steps{steps}_genlen{gen_length}_blockl{block_length}"
                     results = []
                     entropies = []
                     metrics_dict = {
