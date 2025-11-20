@@ -310,6 +310,9 @@ def generate_with_pc_sampler(
                 bg_freq_tensor=CORPUS,
             )
 
+            if i == steps - 1:
+                entropy = -entropy_function(p[:, prompt.shape[1] :]).sum() / gen_length
+
             confidence = torch.where(
                 mask_index[
                     :,
@@ -333,7 +336,7 @@ def generate_with_pc_sampler(
             x[transfer_index] = x0[transfer_index]
     if return_order:
         return x, orders
-    return x
+    return x, entropy.detach().cpu().item()
 
 
 @torch.no_grad()
@@ -369,6 +372,10 @@ def generate_with_eb_sampler(
         predicted_tokens = torch.argmax(logits_with_noise, dim=-1)
         masked_logits = logits[mask_index]
 
+        # get entropy
+        p = F.softmax(logits, dim=-1)
+        entropy = -entropy_function(p[:, prompt.shape[1] :]).sum() / gen_length
+
         err_proxy = torch.distributions.Categorical(logits=masked_logits).entropy()
 
         masked_token_indices = mask_index.nonzero(as_tuple=True)[1]
@@ -389,7 +396,7 @@ def generate_with_eb_sampler(
 
         x[0, indices_to_unmask] = predicted_tokens[0, indices_to_unmask]
 
-    return x
+    return x, entropy.detach().cpu().item()
 
 
 # for fast dllm
@@ -552,4 +559,6 @@ def generate_with_fast_dllm(
                 == mask_id
             ).sum() == 0:
                 break
-    return x, nfe
+        p = F.softmax(logits, dim=-1)
+        entropy = -entropy_function(p[:, prompt.shape[1] :]).sum() / gen_length
+    return x, nfe, entropy.detach().cpu().item()

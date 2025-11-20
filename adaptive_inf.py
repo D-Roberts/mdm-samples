@@ -253,7 +253,7 @@ def main(args):
     print("----------------- Start Answering -------------------")
     all_metrics = dict()
 
-    for mode in ["eb_sampler", "margin"]:  # "fast_dllm", "pc_sampler"]:
+    for mode in ["eb_sampler", "fast_dllm", "pc_sampler"]:  # margin
         for steps in [16]:  # [16, 32]:
             for gen_length in [64, 128]:
                 for block_length in [32]:  # [32, 64]:
