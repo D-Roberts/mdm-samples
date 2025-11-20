@@ -289,9 +289,11 @@ def main(args):
                     eg = 0
                     for input in tqdm(dataset):
                         eg += 1
+                        print(f"I am at iteration {eg}")
+
                         file_path_ground = f"/home/ubuntu/mdm-samples/results/humaneval_results/ground_truth/{eg}.py"
                         file_content_ground = get_groundt_string(eg, file_path_ground)
-                        print(file_content_ground)
+                        # print(file_content_ground)
 
                         answer, entropy = generate(
                             model,
