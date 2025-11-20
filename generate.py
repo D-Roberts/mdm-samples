@@ -177,9 +177,14 @@ def generate_with_margin(
                 )
 
                 sequence_len = logits.shape[1]
+                print(
+                    f"logits shape {logits.shape} and masked logits shape {logits[mask_index].shape}"
+                )
 
                 block_cross_entropy_scores = F.cross_entropy(
-                    logits[mask_index], logits[mask_index], reduction="none"
+                    logits[mask_index][:, prompt.shape[1] :],
+                    logits[mask_index][:, prompt.shape[1] :],
+                    reduction="none",
                 )
                 print(f"block cross entr {block_cross_entropy_scores}")
 
