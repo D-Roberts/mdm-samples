@@ -253,98 +253,101 @@ def main(args):
     print("----------------- Start Answering -------------------")
     all_metrics = dict()
 
-    for steps in [16]:  # [16, 32]:
-        for gen_length in [64, 128]:
-            for block_length in [32]:  # [32, 64]:
-                run_id = f"steps{steps}_genlen{gen_length}_blockl{block_length}"
-                results = []
-                entropies = []
-                metrics_dict = {
-                    "steps": steps,
-                    "block_length": block_length,
-                    "gen_length": gen_length,
-                    "method": mode,
-                    "lambd": lambd,
-                    "alpha": alpha,
-                    "gamma": gamma,
-                    "thread": thread,
-                    "method_metrics": {},
-                }
-                start_time = time.perf_counter()
-
-                for input in tqdm(dataset):
-                    answer, entropy = generate(
-                        model,
-                        tokenizer,
-                        input,
-                        task,
-                        steps,
-                        gen_length,
-                        block_length,
-                        temperature,
-                        mode,
-                        lambd,
-                        alpha,
-                        corpus_name,
-                        thread,
-                        gamma,
-                        num_remask_tokens,
-                    )
-                    results.append(answer)
-                    entropies.append(entropy)
-
-                end_time = time.perf_counter()
-                time_margin = end_time - start_time
-                print(f"Execution time for the 20: {time_margin:.6f} seconds")
-
-                result_path = f"results/humaneval_{mode}"
-                evaluate(task, results, dataset, result_path, args)
-                entp = np.array(entropies)
-
-                metrics_dict["method_metrics"]["entropy"] = {
-                    "point_est": np.mean(entp),
-                    "sample_std": np.std(entp, ddof=1),
-                }
-                metrics_dict["method_metrics"]["seconds_per_20eg"] = time_margin
-                print(f"metrics dict {metrics_dict}")
-
-                print("----------------- Done -------------------")
-
-                # Getting accuracy by executing code and checking results on tests
-
-                py_files = [str(p) for p in Path(result_path).rglob("*.py")]
-                total_files = len(py_files)
-
-                if not py_files:
-                    print("No Python files found!")
-                    return
-
-                print(f"Found {total_files} Python files, starting execution...")
-
-                success_count = 0
-                results = []
-
-                with concurrent.futures.ThreadPoolExecutor(
-                    max_workers=os.cpu_count() * 2
-                ) as executor:
-                    future_to_file = {
-                        executor.submit(run_python_file, f): f for f in py_files
+    for mode in ["eb_sampler", "margin"]:  # "fast_dllm", "pc_sampler"]:
+        for steps in [16]:  # [16, 32]:
+            for gen_length in [64, 128]:
+                for block_length in [32]:  # [32, 64]:
+                    run_id = f"steps{steps}_genlen{gen_length}_blockl{block_length}"
+                    results = []
+                    entropies = []
+                    metrics_dict = {
+                        "steps": steps,
+                        "block_length": block_length,
+                        "gen_length": gen_length,
+                        "method": mode,
+                        "lambd": lambd,
+                        "alpha": alpha,
+                        "gamma": gamma,
+                        "thread": thread,
+                        "method_metrics": {},
                     }
+                    start_time = time.perf_counter()
 
-                    for future in concurrent.futures.as_completed(future_to_file):
-                        file_path, status, message = future.result()
-                        results.append((file_path, status, message))
+                    for input in tqdm(dataset):
+                        answer, entropy = generate(
+                            model,
+                            tokenizer,
+                            input,
+                            task,
+                            steps,
+                            gen_length,
+                            block_length,
+                            temperature,
+                            mode,
+                            lambd,
+                            alpha,
+                            corpus_name,
+                            thread,
+                            gamma,
+                            num_remask_tokens,
+                        )
+                        results.append(answer)
+                        entropies.append(entropy)
 
-                        if status == "Success":
-                            success_count += 1
+                    end_time = time.perf_counter()
+                    time_margin = end_time - start_time
+                    print(f"Execution time for the 20: {time_margin:.6f} seconds")
 
-                        print(f"{file_path}: {status}")
+                    result_path = f"results/humaneval_{mode}"
+                    evaluate(task, results, dataset, result_path, args)
+                    entp = np.array(entropies)
 
-                accuracy = (success_count / total_files) * 100 if total_files > 0 else 0
+                    metrics_dict["method_metrics"]["entropy"] = {
+                        "point_est": np.mean(entp),
+                        "sample_std": np.std(entp, ddof=1),
+                    }
+                    metrics_dict["method_metrics"]["seconds_per_20eg"] = time_margin
+                    print(f"metrics dict {metrics_dict}")
 
-                metrics_dict["method_metrics"]["accuracy"] = accuracy
+                    print("----------------- Done -------------------")
 
-                all_metrics[run_id] = metrics_dict
+                    # Getting accuracy by executing code and checking results on tests
+
+                    py_files = [str(p) for p in Path(result_path).rglob("*.py")]
+                    total_files = len(py_files)
+
+                    if not py_files:
+                        print("No Python files found!")
+                        return
+
+                    print(f"Found {total_files} Python files, starting execution...")
+
+                    success_count = 0
+                    results = []
+
+                    with concurrent.futures.ThreadPoolExecutor(
+                        max_workers=os.cpu_count() * 2
+                    ) as executor:
+                        future_to_file = {
+                            executor.submit(run_python_file, f): f for f in py_files
+                        }
+
+                        for future in concurrent.futures.as_completed(future_to_file):
+                            file_path, status, message = future.result()
+                            results.append((file_path, status, message))
+
+                            if status == "Success":
+                                success_count += 1
+
+                            print(f"{file_path}: {status}")
+
+                    accuracy = (
+                        (success_count / total_files) * 100 if total_files > 0 else 0
+                    )
+
+                    metrics_dict["method_metrics"]["accuracy"] = accuracy
+
+                    all_metrics[run_id] = metrics_dict
 
     # Open the file in write mode and use json.dump() to save the dictionary
     metrics_json = f"all_metrics.json"
