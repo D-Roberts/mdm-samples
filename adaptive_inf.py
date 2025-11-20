@@ -183,7 +183,7 @@ def generate(
     elif mode == "pc_sampler":
         from generate import generate_with_pc_sampler
 
-        out = generate_with_pc_sampler(
+        out, entropy = generate_with_pc_sampler(
             model,
             prompt,
             steps,
@@ -199,13 +199,13 @@ def generate(
     elif mode == "eb_sampler":
         from generate import generate_with_eb_sampler
 
-        out = generate_with_eb_sampler(
+        out, entropy = generate_with_eb_sampler(
             model, prompt, gamma, gen_length, temperature, cfg_scale=0.0
         )
     elif mode == "fast_dllm":
         from generate import generate_with_fast_dllm
 
-        out = generate_with_fast_dllm(
+        out, entropy = generate_with_fast_dllm(
             model,
             prompt,
             steps,
@@ -226,11 +226,11 @@ def main(args):
     task = args.task
     model_name = args.model_name
     device = args.device
-    gen_length = args.gen_length
-    steps = args.steps
-    block_length = args.block_length
+    # gen_length = args.gen_length
+    # steps = args.steps
+    # block_length = args.block_length
     temperature = args.temperature
-    mode = args.mode
+    # mode = args.mode
     lambd = args.lambd
     alpha = args.alpha
     corpus_name = args.corpus_name
