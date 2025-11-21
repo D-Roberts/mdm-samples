@@ -1,0 +1,834 @@
+{
+    "method_margin_steps16_genlen64_blockl32": {
+        "steps": 16,
+        "block_length": 32,
+        "gen_length": 64,
+        "method": "margin",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.5663360595703125,
+                "sample_std": 0.44241489400664885
+            },
+            "nll": {
+                "point_est": 0.43465728759765626,
+                "sample_std": 0.3263973041472691
+            },
+            "perplex": {
+                "point_est": 1.631640625,
+                "sample_std": 0.60323042331796
+            },
+            "seconds_per_20eg": 9.634961706004106,
+            "accuracy": 0.0
+        }
+    },
+    "method_margin_steps16_genlen64_blockl64": {
+        "steps": 16,
+        "block_length": 64,
+        "gen_length": 64,
+        "method": "margin",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.08352112770080566,
+                "sample_std": 0.06998086264184843
+            },
+            "nll": {
+                "point_est": 0.2881988525390625,
+                "sample_std": 0.2563818659889462
+            },
+            "perplex": {
+                "point_est": 1.379296875,
+                "sample_std": 0.3873420846920742
+            },
+            "seconds_per_20eg": 9.255522719002329,
+            "accuracy": 35.0
+        }
+    },
+    "method_margin_steps16_genlen128_blockl32": {
+        "steps": 16,
+        "block_length": 32,
+        "gen_length": 128,
+        "method": "margin",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 2.00107421875,
+                "sample_std": 1.1856637171935376
+            },
+            "nll": {
+                "point_est": 0.735693359375,
+                "sample_std": 0.45825550538025894
+            },
+            "perplex": {
+                "point_est": 2.30546875,
+                "sample_std": 1.0658082084174123
+            },
+            "seconds_per_20eg": 11.506593424011953,
+            "accuracy": 0.0
+        }
+    },
+    "method_margin_steps16_genlen128_blockl64": {
+        "steps": 16,
+        "block_length": 64,
+        "gen_length": 128,
+        "method": "margin",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.91572265625,
+                "sample_std": 0.7266225378751926
+            },
+            "nll": {
+                "point_est": 0.6750732421875,
+                "sample_std": 0.4283019429659332
+            },
+            "perplex": {
+                "point_est": 2.152734375,
+                "sample_std": 1.014319362564996
+            },
+            "seconds_per_20eg": 11.444259293028153,
+            "accuracy": 0.0
+        }
+    },
+    "method_margin_steps32_genlen64_blockl32": {
+        "steps": 32,
+        "block_length": 32,
+        "gen_length": 64,
+        "method": "margin",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.378619384765625,
+                "sample_std": 0.29056001981385465
+            },
+            "nll": {
+                "point_est": 0.380938720703125,
+                "sample_std": 0.3136046913475964
+            },
+            "perplex": {
+                "point_est": 1.54140625,
+                "sample_std": 0.5617004780261475
+            },
+            "seconds_per_20eg": 18.475747889024206,
+            "accuracy": 0.0
+        }
+    },
+    "method_margin_steps32_genlen64_blockl64": {
+        "steps": 32,
+        "block_length": 64,
+        "gen_length": 64,
+        "method": "margin",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.02866392135620117,
+                "sample_std": 0.02503062385326635
+            },
+            "nll": {
+                "point_est": 0.2005950927734375,
+                "sample_std": 0.2781319749566352
+            },
+            "perplex": {
+                "point_est": 1.271875,
+                "sample_std": 0.401714305475526
+            },
+            "seconds_per_20eg": 18.470278612920083,
+            "accuracy": 40.0
+        }
+    },
+    "method_margin_steps32_genlen128_blockl32": {
+        "steps": 32,
+        "block_length": 32,
+        "gen_length": 128,
+        "method": "margin",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 1.97314453125,
+                "sample_std": 1.6234789536609118
+            },
+            "nll": {
+                "point_est": 0.7058837890625,
+                "sample_std": 0.4778174996368059
+            },
+            "perplex": {
+                "point_est": 2.25390625,
+                "sample_std": 1.0544620860480614
+            },
+            "seconds_per_20eg": 22.884794490993954,
+            "accuracy": 0.0
+        }
+    },
+    "method_margin_steps32_genlen128_blockl64": {
+        "steps": 32,
+        "block_length": 64,
+        "gen_length": 128,
+        "method": "margin",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.884033203125,
+                "sample_std": 0.8360235917641894
+            },
+            "nll": {
+                "point_est": 0.6902587890625,
+                "sample_std": 0.45108885384742453
+            },
+            "perplex": {
+                "point_est": 2.191796875,
+                "sample_std": 0.9616024356208875
+            },
+            "seconds_per_20eg": 22.843371461029164,
+            "accuracy": 0.0
+        }
+    },
+    "method_pc_sampler_steps16_genlen64_blockl32": {
+        "steps": 16,
+        "block_length": 32,
+        "gen_length": 64,
+        "method": "pc_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.25023956298828126,
+                "sample_std": 0.2746785146374953
+            },
+            "nll": {
+                "point_est": 0.09085922241210938,
+                "sample_std": 0.23721376931945604
+            },
+            "perplex": {
+                "point_est": 1.13359375,
+                "sample_std": 0.40315352688743317
+            },
+            "seconds_per_20eg": 9.059044503956102,
+            "accuracy": 10.0
+        }
+    },
+    "method_pc_sampler_steps16_genlen64_blockl64": {
+        "steps": 16,
+        "block_length": 64,
+        "gen_length": 64,
+        "method": "pc_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.11331863403320312,
+                "sample_std": 0.11659339886916306
+            },
+            "nll": {
+                "point_est": 0.09437408447265624,
+                "sample_std": 0.2546312611397546
+            },
+            "perplex": {
+                "point_est": 1.14296875,
+                "sample_std": 0.4228113086885617
+            },
+            "seconds_per_20eg": 8.928861277992837,
+            "accuracy": 10.0
+        }
+    },
+    "method_pc_sampler_steps16_genlen128_blockl32": {
+        "steps": 16,
+        "block_length": 32,
+        "gen_length": 128,
+        "method": "pc_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.716473388671875,
+                "sample_std": 0.6127035356413346
+            },
+            "nll": {
+                "point_est": 0.16840362548828125,
+                "sample_std": 0.24941466729516437
+            },
+            "perplex": {
+                "point_est": 1.2234375,
+                "sample_std": 0.35887765929645893
+            },
+            "seconds_per_20eg": 10.966752358013764,
+            "accuracy": 10.0
+        }
+    },
+    "method_pc_sampler_steps16_genlen128_blockl64": {
+        "steps": 16,
+        "block_length": 64,
+        "gen_length": 128,
+        "method": "pc_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.3431243896484375,
+                "sample_std": 0.31542511373059784
+            },
+            "nll": {
+                "point_est": 0.18460845947265625,
+                "sample_std": 0.2510154050484832
+            },
+            "perplex": {
+                "point_est": 1.242578125,
+                "sample_std": 0.3476202117631159
+            },
+            "seconds_per_20eg": 10.963942817994393,
+            "accuracy": 10.0
+        }
+    },
+    "method_pc_sampler_steps32_genlen64_blockl32": {
+        "steps": 32,
+        "block_length": 32,
+        "gen_length": 64,
+        "method": "pc_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.06762466430664063,
+                "sample_std": 0.05987891100900823
+            },
+            "nll": {
+                "point_est": 0.000885009765625,
+                "sample_std": 0.002253846813289162
+            },
+            "perplex": {
+                "point_est": 1.001171875,
+                "sample_std": 0.002862090222910338
+            },
+            "seconds_per_20eg": 17.84452716400847,
+            "accuracy": 25.0
+        }
+    },
+    "method_pc_sampler_steps32_genlen64_blockl64": {
+        "steps": 32,
+        "block_length": 64,
+        "gen_length": 64,
+        "method": "pc_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.03373851776123047,
+                "sample_std": 0.030023680028079047
+            },
+            "nll": {
+                "point_est": 0.000885009765625,
+                "sample_std": 0.002253846813289162
+            },
+            "perplex": {
+                "point_est": 1.001171875,
+                "sample_std": 0.002862090222910338
+            },
+            "seconds_per_20eg": 17.843063576961868,
+            "accuracy": 25.0
+        }
+    },
+    "method_pc_sampler_steps32_genlen128_blockl32": {
+        "steps": 32,
+        "block_length": 32,
+        "gen_length": 128,
+        "method": "pc_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.3123779296875,
+                "sample_std": 0.22673119082147408
+            },
+            "nll": {
+                "point_est": 0.0955230712890625,
+                "sample_std": 0.28011410637201617
+            },
+            "perplex": {
+                "point_est": 1.158203125,
+                "sample_std": 0.526670196067307
+            },
+            "seconds_per_20eg": 21.894653400988318,
+            "accuracy": 5.0
+        }
+    },
+    "method_pc_sampler_steps32_genlen128_blockl64": {
+        "steps": 32,
+        "block_length": 64,
+        "gen_length": 128,
+        "method": "pc_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.1537109375,
+                "sample_std": 0.140571593020019
+            },
+            "nll": {
+                "point_est": 0.0626129150390625,
+                "sample_std": 0.13096937405641484
+            },
+            "perplex": {
+                "point_est": 1.07421875,
+                "sample_std": 0.16296231994556126
+            },
+            "seconds_per_20eg": 21.883975861943327,
+            "accuracy": 5.0
+        }
+    },
+    "method_eb_sampler_steps16_genlen64_blockl32": {
+        "steps": 16,
+        "block_length": 32,
+        "gen_length": 64,
+        "method": "eb_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.021277332305908205,
+                "sample_std": 0.020601536406552094
+            },
+            "nll": {
+                "point_est": 0.13773765563964843,
+                "sample_std": 0.2843683780346924
+            },
+            "perplex": {
+                "point_est": 1.204296875,
+                "sample_std": 0.47678337606853755
+            },
+            "seconds_per_20eg": 24.105430001975037,
+            "accuracy": 25.0
+        }
+    },
+    "method_eb_sampler_steps16_genlen64_blockl64": {
+        "steps": 16,
+        "block_length": 64,
+        "gen_length": 64,
+        "method": "eb_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.021277332305908205,
+                "sample_std": 0.020601536406552094
+            },
+            "nll": {
+                "point_est": 0.13773765563964843,
+                "sample_std": 0.2843683780346924
+            },
+            "perplex": {
+                "point_est": 1.204296875,
+                "sample_std": 0.47678337606853755
+            },
+            "seconds_per_20eg": 24.050396134029143,
+            "accuracy": 25.0
+        }
+    },
+    "method_eb_sampler_steps16_genlen128_blockl32": {
+        "steps": 16,
+        "block_length": 32,
+        "gen_length": 128,
+        "method": "eb_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.03106372356414795,
+                "sample_std": 0.04086340010612764
+            },
+            "nll": {
+                "point_est": 0.2699951171875,
+                "sample_std": 0.33481602047254955
+            },
+            "perplex": {
+                "point_est": 1.3890625,
+                "sample_std": 0.5313564134908835
+            },
+            "seconds_per_20eg": 67.38125221501105,
+            "accuracy": 10.0
+        }
+    },
+    "method_eb_sampler_steps16_genlen128_blockl64": {
+        "steps": 16,
+        "block_length": 64,
+        "gen_length": 128,
+        "method": "eb_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.03106372356414795,
+                "sample_std": 0.04086340010612764
+            },
+            "nll": {
+                "point_est": 0.2699951171875,
+                "sample_std": 0.33481602047254955
+            },
+            "perplex": {
+                "point_est": 1.3890625,
+                "sample_std": 0.5313564134908835
+            },
+            "seconds_per_20eg": 67.36555289698299,
+            "accuracy": 10.0
+        }
+    },
+    "method_eb_sampler_steps32_genlen64_blockl32": {
+        "steps": 32,
+        "block_length": 32,
+        "gen_length": 64,
+        "method": "eb_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.021277332305908205,
+                "sample_std": 0.020601536406552094
+            },
+            "nll": {
+                "point_est": 0.13773765563964843,
+                "sample_std": 0.2843683780346924
+            },
+            "perplex": {
+                "point_est": 1.204296875,
+                "sample_std": 0.47678337606853755
+            },
+            "seconds_per_20eg": 24.063016029074788,
+            "accuracy": 25.0
+        }
+    },
+    "method_eb_sampler_steps32_genlen64_blockl64": {
+        "steps": 32,
+        "block_length": 64,
+        "gen_length": 64,
+        "method": "eb_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.021277332305908205,
+                "sample_std": 0.020601536406552094
+            },
+            "nll": {
+                "point_est": 0.13773765563964843,
+                "sample_std": 0.2843683780346924
+            },
+            "perplex": {
+                "point_est": 1.204296875,
+                "sample_std": 0.47678337606853755
+            },
+            "seconds_per_20eg": 24.084680075990036,
+            "accuracy": 25.0
+        }
+    },
+    "method_eb_sampler_steps32_genlen128_blockl32": {
+        "steps": 32,
+        "block_length": 32,
+        "gen_length": 128,
+        "method": "eb_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.03106372356414795,
+                "sample_std": 0.04086340010612764
+            },
+            "nll": {
+                "point_est": 0.2699951171875,
+                "sample_std": 0.33481602047254955
+            },
+            "perplex": {
+                "point_est": 1.3890625,
+                "sample_std": 0.5313564134908835
+            },
+            "seconds_per_20eg": 67.37118396989536,
+            "accuracy": 10.0
+        }
+    },
+    "method_eb_sampler_steps32_genlen128_blockl64": {
+        "steps": 32,
+        "block_length": 64,
+        "gen_length": 128,
+        "method": "eb_sampler",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.03106372356414795,
+                "sample_std": 0.04086340010612764
+            },
+            "nll": {
+                "point_est": 0.2699951171875,
+                "sample_std": 0.33481602047254955
+            },
+            "perplex": {
+                "point_est": 1.3890625,
+                "sample_std": 0.5313564134908835
+            },
+            "seconds_per_20eg": 67.36226879491005,
+            "accuracy": 10.0
+        }
+    },
+    "method_fast_dllm_steps16_genlen64_blockl32": {
+        "steps": 16,
+        "block_length": 32,
+        "gen_length": 64,
+        "method": "fast_dllm",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.062430191040039065,
+                "sample_std": 0.045159283869903824
+            },
+            "nll": {
+                "point_est": 0.09819793701171875,
+                "sample_std": 0.18507330476450282
+            },
+            "perplex": {
+                "point_est": 1.123828125,
+                "sample_std": 0.2508373492344599
+            },
+            "seconds_per_20eg": 12.03712077694945,
+            "accuracy": 30.0
+        }
+    },
+    "method_fast_dllm_steps16_genlen64_blockl64": {
+        "steps": 16,
+        "block_length": 64,
+        "gen_length": 64,
+        "method": "fast_dllm",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.024971580505371092,
+                "sample_std": 0.02616732858610039
+            },
+            "nll": {
+                "point_est": 0.09935722351074219,
+                "sample_std": 0.20136332340530655
+            },
+            "perplex": {
+                "point_est": 1.128515625,
+                "sample_std": 0.2757418760098728
+            },
+            "seconds_per_20eg": 10.94006473699119,
+            "accuracy": 35.0
+        }
+    },
+    "method_fast_dllm_steps16_genlen128_blockl32": {
+        "steps": 16,
+        "block_length": 32,
+        "gen_length": 128,
+        "method": "fast_dllm",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.1972900390625,
+                "sample_std": 0.15249936576823284
+            },
+            "nll": {
+                "point_est": 0.0634979248046875,
+                "sample_std": 0.11830439334155134
+            },
+            "perplex": {
+                "point_est": 1.07265625,
+                "sample_std": 0.1374855143386405
+            },
+            "seconds_per_20eg": 19.723016701056622,
+            "accuracy": 50.0
+        }
+    },
+    "method_fast_dllm_steps16_genlen128_blockl64": {
+        "steps": 16,
+        "block_length": 64,
+        "gen_length": 128,
+        "method": "fast_dllm",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.09310302734375,
+                "sample_std": 0.08393854737550545
+            },
+            "nll": {
+                "point_est": 0.07774052619934083,
+                "sample_std": 0.16336523862995447
+            },
+            "perplex": {
+                "point_est": 1.096484375,
+                "sample_std": 0.2156183702975843
+            },
+            "seconds_per_20eg": 17.457649264950305,
+            "accuracy": 50.0
+        }
+    },
+    "method_fast_dllm_steps32_genlen64_blockl32": {
+        "steps": 32,
+        "block_length": 32,
+        "gen_length": 64,
+        "method": "fast_dllm",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.062430191040039065,
+                "sample_std": 0.045159283869903824
+            },
+            "nll": {
+                "point_est": 0.09819793701171875,
+                "sample_std": 0.18507330476450282
+            },
+            "perplex": {
+                "point_est": 1.123828125,
+                "sample_std": 0.2508373492344599
+            },
+            "seconds_per_20eg": 12.050270066945814,
+            "accuracy": 30.0
+        }
+    },
+    "method_fast_dllm_steps32_genlen64_blockl64": {
+        "steps": 32,
+        "block_length": 64,
+        "gen_length": 64,
+        "method": "fast_dllm",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.024971580505371092,
+                "sample_std": 0.02616732858610039
+            },
+            "nll": {
+                "point_est": 0.09935722351074219,
+                "sample_std": 0.20136332340530655
+            },
+            "perplex": {
+                "point_est": 1.128515625,
+                "sample_std": 0.2757418760098728
+            },
+            "seconds_per_20eg": 10.941407537087798,
+            "accuracy": 35.0
+        }
+    },
+    "method_fast_dllm_steps32_genlen128_blockl32": {
+        "steps": 32,
+        "block_length": 32,
+        "gen_length": 128,
+        "method": "fast_dllm",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.1972900390625,
+                "sample_std": 0.15249936576823284
+            },
+            "nll": {
+                "point_est": 0.0634979248046875,
+                "sample_std": 0.11830439334155134
+            },
+            "perplex": {
+                "point_est": 1.07265625,
+                "sample_std": 0.1374855143386405
+            },
+            "seconds_per_20eg": 19.71211130602751,
+            "accuracy": 50.0
+        }
+    },
+    "method_fast_dllm_steps32_genlen128_blockl64": {
+        "steps": 32,
+        "block_length": 64,
+        "gen_length": 128,
+        "method": "fast_dllm",
+        "lambd": 0.25,
+        "alpha": 10,
+        "gamma": 0.01,
+        "threashold": 0.9,
+        "method_metrics": {
+            "entropy": {
+                "point_est": 0.09310302734375,
+                "sample_std": 0.08393854737550545
+            },
+            "nll": {
+                "point_est": 0.07774052619934083,
+                "sample_std": 0.16336523862995447
+            },
+            "perplex": {
+                "point_est": 1.096484375,
+                "sample_std": 0.2156183702975843
+            },
+            "seconds_per_20eg": 17.4513151680585,
+            "accuracy": 50.0
+        }
+    }
+}
